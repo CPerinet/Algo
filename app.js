@@ -12,9 +12,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/DBNAME');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -49,20 +46,6 @@ app.use(session({
   saveUninitialized: true,
   secret: 'azerty12354'
 }))
-
-
-
-
-/**
- *
- * Database
- *
- */
-
-app.use(function(req,res,next){
-    req.db = db;
-    next();
-});
 
 
 
