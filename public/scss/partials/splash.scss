@@ -1,0 +1,36 @@
+.splash {
+	@extend .full;
+
+	background: #2f3838;
+
+	&_logo {
+		@extend .alignXY;
+
+		width: 300px;
+		height: auto;
+	}
+
+	&_next {
+		@extend .alignX;
+		bottom: 100px;
+		text-transform: uppercase;
+		font-weight: bold;
+		letter-spacing: 2px;
+
+		color: white;
+
+		opacity: 1;
+		
+		animation: blink 1s infinite alternate linear forwards 0s;
+	}
+
+	@keyframes blink {
+		from {
+			opacity: 1;
+		}
+
+		to {
+			opacity: 0.5;
+		}
+	}
+}

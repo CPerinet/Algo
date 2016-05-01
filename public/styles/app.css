@@ -5,6 +5,7 @@
 
 ************************************************************
 *********************************************************/
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,700,400italic,300);
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -52,14 +53,14 @@ table {
   border-collapse: collapse;
   border-spacing: 0; }
 
-.alignXY {
+.alignXY, .splash_logo {
   position: absolute;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%); }
 
-.alignX {
+.alignX, .splash_next {
   position: absolute;
   left: 50%;
   -webkit-transform: translateX(-50%);
@@ -70,6 +71,13 @@ table {
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%); }
+
+.full, .splash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; }
 
 .clearfix:before, .clearfix:after {
   content: " ";
@@ -104,8 +112,9 @@ html, body, main {
   position: relative; }
 
 body {
-  font-size: 1em;
-  line-height: 1.5; }
+  font-size: 16px;
+  line-height: 1.5;
+  font-family: 'Raleway', sans-serif; }
 
 a {
   -webkit-transition: all 0.3s;
@@ -136,3 +145,30 @@ p {
 @media (min-width: 960px) {
   .content {
     max-width: 1000px; } }
+
+.splash {
+  background: #2f3838; }
+  .splash_logo {
+    width: 300px;
+    height: auto; }
+  .splash_next {
+    bottom: 100px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: white;
+    opacity: 1;
+    -webkit-animation: blink 1s infinite alternate linear forwards 0s;
+            animation: blink 1s infinite alternate linear forwards 0s; }
+
+@-webkit-keyframes blink {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0.5; } }
+
+@keyframes blink {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0.5; } }

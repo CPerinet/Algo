@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var $ = require("jquery");
+
 var request = require('request');
-
 var sphero = require("sphero");
-    orb = sphero("/dev/tty.Sphero-BBY-AMP-SPP"); // change port accordingly 
-
+var orb = new sphero("/dev/tty.Sphero-BBY-AMP-SPP", {emitPacketErrors: true, timeout: 300});
 
 
 /**
@@ -15,6 +14,46 @@ var sphero = require("sphero");
  */
 
 router.get('/', function(req, res, next) {
+	var strings = ["rad", "bla", "ska"]
+    var n = Math.floor(Math.random() * strings.length)
+    res.send(strings[n])
+
+
+    res.render('index');
+});
+
+
+
+/**
+ *
+ * Tutorial
+ *
+ */
+
+router.get('/tuto', function(req, res, next) {
+	res.render('tuto');
+});
+
+
+/**
+ *
+ * Program
+ *
+ */
+
+router.get('/program', function(req, res, next) {
+	res.render('program');
+});
+
+
+
+/**
+ *
+ * Roll
+ *
+ */
+
+router.get('/roll', function(req, res, next) {
 
 	orb.connect(function() {
 
@@ -22,33 +61,31 @@ router.get('/', function(req, res, next) {
 			console.log ( err, data );
 		});
 
-	  // roll Sphero forward 
-	  orb.roll(100, 0);
-	 
-	  // turn Sphero green 
-	  orb.color("green");
-	 
-	  // have Sphero tell you when it detect collisions 
-	  orb.detectCollisions();
-	 
-	  // when Sphero detects a collision, turn red for a second, then back to green 
-	  orb.on("collision", function(data) {
-	    console.log("collision detected");
-	    console.log("  data:", data);
-	 
-	    orb.color("red");
-	 
-	    setTimeout(function() {
-	      orb.color("green");
-	    }, 100);
+		orb.color("purple");
 
-	  });
+		orb.detectCollisions();
+
+		orb.on("collision", function(data) {
+
+			orb.color("red");
+		 
+		    setTimeout(function() {
+				
+				res.redirect('/')
+
+			}, 100);
+
+		});
+
+		res.render('roll');
 
 	});
 
-    res.render('index');
-
 });
+
+
+
+
 
 
 module.exports = router;
