@@ -1,18 +1,26 @@
-const paths = {
+var gulp = require('gulp'),
+	concat = require('gulp-concat'),
+	sass = require('gulp-sass'),
+	autoprefixer = require('gulp-autoprefixer'),
+	plumber = require('gulp-plumber'),
+	addsrc = require('gulp-add-src'),
+	babel = require('gulp-babel'),
+	uglify = require('gulp-uglify');
+;
+
+
+var paths = {
 	scss_app : 'public/scss/app.scss',
 	scss_files : 'public/scss/**/*.scss',
 	css : 'public/styles/',
 
-	input_scripts : 'public/es6/**/*.js',
-	output_scripts : 'public/scripts/'
-}
 
-const gulp = require('gulp'),
-	sass = require('gulp-sass'),
-	autoprefixer = require('gulp-autoprefixer'),
-	plumber = require('gulp-plumber'),
-	babel = require('gulp-babel')
-;
+	es6_in : 'public/scripts/es6/**/*.js',
+	vendors_in : 'public/scripts/vendors/**/*.js',
+	
+	scripts : 'public/scripts/'
+};
+
 
 gulp.task('styles', function() {
 	return gulp.src( paths.scss_app )
@@ -26,17 +34,28 @@ gulp.task('styles', function() {
 		.pipe( gulp.dest( paths.css ) );
 });
 
+
 gulp.task('scripts', function() {
-	return gulp.src( paths.input_scripts )
-		.pipe(plumber())
+	return gulp.src( paths.es6_in )
+		.pipe( plumber() )
+
 		.pipe( babel({
 			presets: ['es2015']
 		}))
+		
+		.pipe(addsrc.prepend(paths.vendors_in) )
+		
+		.pipe(concat("app.js"))
+
+		.pipe(uglify())
+		
 		.pipe(plumber.stop())
-		.pipe(gulp.dest( paths.output_scripts ));
+		
+		.pipe(gulp.dest( paths.scripts ));
 });
 
-gulp.task('default', function() {
+
+gulp.task('watch', function() {
 	gulp.watch( paths.scss_files, ['styles'] );
-	gulp.watch( paths.input_scripts, ['scripts'] );
+	gulp.watch( paths.es6_in, ['scripts'] );
 });

@@ -16,7 +16,7 @@ jQuery(function($) {
 			splash : $("#splash")
 
 		}
-		
+
 
 		/**
 		 *
@@ -29,31 +29,14 @@ jQuery(function($) {
 		function init() {
 			console.log( "INIT")
 
-			dom.each( (el, value) => {
-				console.log(el)
+			$.each( dom, (key, value) => {
+
+				TweenLite.set(value, {autoAlpha: 0})
+
 				console.log(value)
 			})
 		}
 
-		class Splash {
-
-			constructor(dom) {
-				this.el = dom
-			}
-
-			hide() {
-
-			}
-
-			show() {
-
-				console.log(dom)
-
-			}
-
-		} 
-
-		let splash = new Splash(dom.splash)
 
 	})
 
