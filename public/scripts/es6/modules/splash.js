@@ -19,7 +19,11 @@ class Splash {
 	}
 
 	show() {
+		dom.click( () => {
 
+			alert("CLICK")
+
+		})
 	}
 
 }

@@ -42,13 +42,7 @@ const server = app.listen(port, function() {
 
 var io = require('socket.io')(server);
 
-io.on('connection', function(socket) {
-  console.log('a user connected');
- 
-  socket.on('disconnect', function() {
-    console.log('user disconnected');
-  });
-});
+
 
 
 
@@ -60,11 +54,21 @@ io.on('connection', function(socket) {
 
 router.get('/', function(req, res, next) {
 
+  //io.emit('sp_connect', {msg:'Sphero connected !'});
 
-    setTimeout(function() {
-      io.emit('sp_connect', {msg:'Sphero connected !'});
-      console.log('Sphero connected');
-    }, 4000);
+  io.on('connection', function(socket) {
+    console.log('=> USER CONNECTED');
+   
+    socket.on('hello', function() {
+      console.log("  -> User says hello !")
+    })
+
+    socket.on('disconnect', function() {
+      console.log('=> USER DISCONNECTED');
+    });
+  });
+
+    
     
 
     res.render('index');

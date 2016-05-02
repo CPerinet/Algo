@@ -1,3 +1,5 @@
+let socket;
+let state;
 
 jQuery(function($) {
 
@@ -9,33 +11,35 @@ jQuery(function($) {
 		 *
 		 */
 
-		let state = 0
+		state = 0
 
-		let dom = {
-
-			splash : $("#splash")
-
-		}
 
 
 		/**
 		 *
-		 * Socket
+		 * Init
 		 *
-		 */
-		
-		var socket = io.connect('http://localhost:3700')
+		 */		
 
 		function init() {
+
 			console.log( "INIT")
 
-			$.each( dom, (key, value) => {
+			socket = io.connect('http://localhost:3700')
+			socket.emit('hello', { message: 'hello'})
 
-				TweenLite.set(value, {autoAlpha: 0})
+			// $.each( dom, (key, value) => {
 
-				console.log(value)
-			})
+			// 	TweenLite.set(value, {autoAlpha: 0})
+
+			// 	console.log(value)
+			// })
+
+
+
 		}
+
+		init()
 
 
 	})
