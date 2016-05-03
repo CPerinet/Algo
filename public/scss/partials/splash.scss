@@ -1,9 +1,8 @@
 .splash {
 	@extend .full;
 
-	background: #2f3838;
-
 	&_logo {
+		@extend .hide;
 		@extend .alignXY;
 
 		width: 300px;
@@ -20,8 +19,10 @@
 		color: white;
 
 		opacity: 1;
+
+		transform: translate(-50%, 200px);
 		
-		animation: blink 1s infinite alternate linear forwards 0s;
+		animation: blink 0.8s infinite alternate linear forwards 0s;
 	}
 
 	@keyframes blink {
@@ -30,7 +31,7 @@
 		}
 
 		to {
-			opacity: 0.5;
+			opacity: 0.6;
 		}
 	}
 }

@@ -6,6 +6,7 @@
 ************************************************************
 *********************************************************/
 @import url(https://fonts.googleapis.com/css?family=Raleway:400,700,400italic,300);
+@import url(https://fonts.googleapis.com/css?family=Architects+Daughter);
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -60,7 +61,7 @@ table {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%); }
 
-.alignX, .splash_next {
+.alignX, .alignB, .splash_next {
   position: absolute;
   left: 50%;
   -webkit-transform: translateX(-50%);
@@ -72,12 +73,15 @@ table {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%); }
 
-.full, .splash {
+.full, .splash, .tuto {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0; }
+
+.alignB {
+  bottom: 40px; }
 
 .clearfix:before, .clearfix:after {
   content: " ";
@@ -104,17 +108,28 @@ table {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none; }
 
 html, body, main {
   height: 100%;
   width: 100%;
-  position: relative; }
+  position: relative;
+  overflow: hidden; }
+
+html {
+  background: #2f3838; }
 
 body {
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.5;
-  font-family: 'Raleway', sans-serif; }
+  font-family: 'Raleway', sans-serif;
+  background-image: url("../img/back.jpg");
+  background-size: cover;
+  background-position: center; }
 
 a {
   -webkit-transition: all 0.3s;
@@ -129,46 +144,83 @@ p {
 
 .content {
   width: 100%;
-  max-width: 750px;
-  padding: 0 40px;
+  max-width: 800px;
+  padding: 100px;
   margin: 0 auto; }
-  .content:before, .content:after {
-    content: " ";
-    display: table; }
-  .content:after {
-    clear: both; }
 
-@media (min-width: 768px) {
-  .content {
-    max-width: 850px; } }
+.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn {
+  opacity: 0;
+  visibility: hidden; }
 
-@media (min-width: 960px) {
-  .content {
-    max-width: 1000px; } }
-
-.splash {
-  background: #2f3838; }
-  .splash_logo {
-    width: 300px;
-    height: auto; }
-  .splash_next {
-    bottom: 100px;
-    text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 2px;
+.btn {
+  display: block;
+  margin: 20px 20px;
+  min-width: 200px;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  border: solid 1px rgba(255, 255, 255, 0.9);
+  border-radius: 30px;
+  box-shadow: 1px 1px 1px rgba(42, 49, 53, 0.2); }
+  .btn-lg {
+    min-width: 250px; }
+  .btn-alert {
+    margin-top: 40px;
+    background: rgba(238, 83, 59, 0.9);
+    border-color: rgba(238, 83, 59, 0.9);
+    color: white; }
+  .btn-low {
+    background: none;
     color: white;
-    opacity: 1;
-    -webkit-animation: blink 1s infinite alternate linear forwards 0s;
-            animation: blink 1s infinite alternate linear forwards 0s; }
+    box-shadow: none; }
+
+.controls .btn {
+  display: inline-block; }
+
+.splash_logo {
+  width: 300px;
+  height: auto; }
+
+.splash_next {
+  bottom: 100px;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: white;
+  opacity: 1;
+  -webkit-transform: translate(-50%, 200px);
+          transform: translate(-50%, 200px);
+  -webkit-animation: blink 0.8s infinite alternate linear forwards 0s;
+          animation: blink 0.8s infinite alternate linear forwards 0s; }
 
 @-webkit-keyframes blink {
   from {
     opacity: 1; }
   to {
-    opacity: 0.5; } }
+    opacity: 0.6; } }
 
 @keyframes blink {
   from {
     opacity: 1; }
   to {
-    opacity: 0.5; } }
+    opacity: 0.6; } }
+
+.tuto {
+  z-index: 5; }
+  .tuto_video {
+    display: inline-block;
+    vertical-align: middle;
+    width: 40%; }
+  .tuto_instructions {
+    display: inline-block;
+    vertical-align: middle;
+    width: 60%;
+    color: white; }
+    .tuto_instructions h1 {
+      font-family: 'Architects Daughter', cursive;
+      font-size: 40px; }
+  .tuto #tuto_controls .btn {
+    -webkit-transform: translate(0, 200px);
+            transform: translate(0, 200px); }

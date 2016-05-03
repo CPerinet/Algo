@@ -47,7 +47,7 @@ gulp.task('scripts', function() {
 		
 		.pipe(concat("app.js"))
 
-		.pipe(uglify())
+		//.pipe(uglify())
 		
 		.pipe(plumber.stop())
 		

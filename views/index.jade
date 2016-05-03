@@ -7,4 +7,38 @@ block content
 		section#splash.splash
 
 			img.splash_logo(src="img/splash_logo.png")
-			p.splash_next Touchez l'écran pour commencer !
+			p.splash_next Touchez l'écran pour continuer !
+
+		
+		section#menu.menu
+			.alignXY
+				p#menu_start.btn.btn-lg Commencer
+				p#menu_config.btn.btn-lg Options
+				p#menu_about.btn.btn-lg A propos
+				p#menu_quit.btn.btn-lg.btn-alert Quitter
+		
+		
+		section#tuto.tuto
+			#tuto_create.alignXY
+				video#tuto_video.tuto_video(src="videos/path.mp4", autoplay, loop, muted)
+				.tuto_instructions
+					h1 Créer le parcours !
+					p Utiliser les blocs en bois fournis dans la boite pour créer un parcours.
+			
+			#tuto_calibrate.alignXY
+				.tuto_instructions
+					h1 Calibrer Algo
+					p Posez simplement Algo sur la première case, la lumière bleue face à vous.
+
+			#tuto_controls.alignB.controls
+				p#tuto_back.btn.btn-low Retour
+				p#tuto_next.btn Continuer
+
+
+		section#program.program
+			ul.list
+				li.list_item.forward
+				li.list_item.forward
+				li.list_item.forward
+				li.list_item.forward
+

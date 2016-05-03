@@ -1,3 +1,37 @@
 .tuto {
-	
+	@extend .full;
+	@extend .hide;
+
+	z-index: 5;
+
+	&_video {
+		display: inline-block;
+		vertical-align: middle;
+
+		width: 40%;
+	}
+
+	&_instructions {
+
+		display: inline-block;
+		vertical-align: middle;
+
+		width: 60%;
+		
+		color: white;
+
+		h1 {
+			font-family: 'Architects Daughter', cursive;
+			font-size: 40px;
+		}
+	}
+
+	#tuto_create, #tuto_calibrate {
+		@extend .hide;
+	}
+
+	#tuto_controls .btn {
+		@extend .hide;
+		transform: translate(0, 200px);
+	}
 }

@@ -10,6 +10,9 @@ var express = require("express");
 var router = express.Router();
 var $ = require("jquery");
 
+var sphero = require("sphero");
+var orb;
+
 
 
 
@@ -36,11 +39,7 @@ app.set('view engine', 'jade');
  *
  */
 
-const server = app.listen(port, function() {
-  console.log('listening on *:' + port);
-});
-
-var io = require('socket.io')(server);
+const server = app.listen(port);
 
 
 
@@ -56,8 +55,33 @@ router.get('/', function(req, res, next) {
 
   //io.emit('sp_connect', {msg:'Sphero connected !'});
 
+  var io = require('socket.io')(server);
+
   io.on('connection', function(socket) {
+
     console.log('=> USER CONNECTED');
+
+    //orb = new sphero("/dev/tty.Sphero-BBY-AMP-SPP", {emitPacketErrors: true, timeout: 300});
+
+    // orb.connect(function() {
+
+    //   orb.on("error", function(err, data) {
+    //     console.log ( err, data );
+    //   });
+
+    //   io.emit('sp_connected', {msg:'Sphero connected !'});
+
+    //   orb.color("purple");
+
+    //   orb.detectCollisions();
+
+    //   orb.on("collision", function(data) {
+
+    //     io.emit('sp_collision', {msg:'Sphero falled !'});
+
+    //   });
+
+    // });
    
     socket.on('hello', function() {
       console.log("  -> User says hello !")
@@ -66,12 +90,11 @@ router.get('/', function(req, res, next) {
     socket.on('disconnect', function() {
       console.log('=> USER DISCONNECTED');
     });
+  
   });
 
-    
-    
+  res.render('index');
 
-    res.render('index');
 });
 
 
