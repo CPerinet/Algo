@@ -36,9 +36,29 @@ block content
 
 
 		section#program.program
-			ul.list
-				li.list_item.forward
-				li.list_item.forward
-				li.list_item.forward
-				li.list_item.forward
+			img#program_play(src="img/play.svg", alt="")
+
+			ul#program_instructions.intructions
+
+			ul#program_controls
+				li.instruction.open(data-direction="UP" data-loop="1")
+					i.arrow.fa.fa-arrow-up
+				li.instruction(data-direction="RIGHT" data-loop="1")
+					i.arrow.fa.fa-arrow-right
+				li.instruction(data-direction="DOWN" data-loop="1")
+					i.arrow.fa.fa-arrow-down
+				li.instruction(data-direction="LEFT" data-loop="1")
+					i.arrow.fa.fa-arrow-left
+
+			ul#program_trash
+				i.close.fa.fa-trash
+
+				li.instruction(data-direction="LEFT" data-loop="1")
+					i.arrow.fa.fa-arrow-left
+
+			#program_loop
+				input#slider-step(type="range" name="slider-step" value="1" min="1" max="9" step="1" data-highlight="true")
+
+
+
 

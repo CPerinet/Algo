@@ -7,6 +7,7 @@
 *********************************************************/
 @import url(https://fonts.googleapis.com/css?family=Raleway:400,700,400italic,300);
 @import url(https://fonts.googleapis.com/css?family=Architects+Daughter);
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,900,300);
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -54,26 +55,26 @@ table {
   border-collapse: collapse;
   border-spacing: 0; }
 
-.alignXY, .splash_logo {
+.alignXY, .splash_logo, .program .placeholder::before, .program .instruction .arrow, .program .instruction .loop, .program .instruction .close, .program .instruction.instruction_ghost::before, .program #program_trash i {
   position: absolute;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%); }
 
-.alignX, .alignB, .splash_next {
+.alignX, .alignB, .splash_next, .program #program_play, .program #program_instructions li::after, .program #program_loop .ui-slider .ui-slider-input {
   position: absolute;
   left: 50%;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%); }
 
-.alignY {
+.alignY, .program #program_loop {
   position: absolute;
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%); }
 
-.full, .splash, .tuto {
+.full, .splash, .tuto, .program {
   position: absolute;
   top: 0;
   left: 0;
@@ -82,6 +83,10 @@ table {
 
 .alignB {
   bottom: 40px; }
+
+.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_loop {
+  opacity: 0;
+  visibility: hidden; }
 
 .clearfix:before, .clearfix:after {
   content: " ";
@@ -114,7 +119,7 @@ table {
       -ms-user-select: none;
           user-select: none; }
 
-html, body, main {
+html, body, main, .ui-page {
   height: 100%;
   width: 100%;
   position: relative;
@@ -126,7 +131,7 @@ html {
 body {
   font-size: 18px;
   line-height: 1.5;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Lato', sans-serif;
   background-image: url("../img/back.jpg");
   background-size: cover;
   background-position: center; }
@@ -148,7 +153,7 @@ p {
   padding: 100px;
   margin: 0 auto; }
 
-.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn {
+.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_loop {
   opacity: 0;
   visibility: hidden; }
 
@@ -179,21 +184,22 @@ p {
 .controls .btn {
   display: inline-block; }
 
-.splash_logo {
-  width: 300px;
-  height: auto; }
-
-.splash_next {
-  bottom: 100px;
-  text-transform: uppercase;
-  font-weight: bold;
-  letter-spacing: 2px;
-  color: white;
-  opacity: 1;
-  -webkit-transform: translate(-50%, 200px);
-          transform: translate(-50%, 200px);
-  -webkit-animation: blink 0.8s infinite alternate linear forwards 0s;
-          animation: blink 0.8s infinite alternate linear forwards 0s; }
+.splash {
+  overflow: hidden; }
+  .splash_logo {
+    width: 300px;
+    height: auto; }
+  .splash_next {
+    bottom: 100px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: white;
+    opacity: 1;
+    -webkit-transform: translate(-50%, 200px);
+            transform: translate(-50%, 200px);
+    -webkit-animation: blink 0.8s infinite alternate linear forwards 0s;
+            animation: blink 0.8s infinite alternate linear forwards 0s; }
 
 @-webkit-keyframes blink {
   from {
@@ -208,7 +214,8 @@ p {
     opacity: 0.6; } }
 
 .tuto {
-  z-index: 5; }
+  z-index: 5;
+  overflow: hidden; }
   .tuto_video {
     display: inline-block;
     vertical-align: middle;
@@ -224,3 +231,272 @@ p {
   .tuto #tuto_controls .btn {
     -webkit-transform: translate(0, 200px);
             transform: translate(0, 200px); }
+
+.program {
+  background: rgba(27, 190, 212, 0.6);
+  overflow-x: scroll; }
+  .program #program_play {
+    position: fixed;
+    top: 10px;
+    width: 40px; }
+  .program #program_instructions {
+    position: absolute;
+    top: 50%;
+    margin-top: -80px;
+    min-width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    text-align: center;
+    height: 160px;
+    padding: 40px 270px 40px 60px;
+    border-top: solid 1px white;
+    border-bottom: solid 1px white;
+    background: -webkit-linear-gradient(bottom, rgba(19, 23, 25, 0.2) 0%, rgba(42, 49, 53, 0.1) 100%);
+    background: linear-gradient(to top, rgba(19, 23, 25, 0.2) 0%, rgba(42, 49, 53, 0.1) 100%);
+    counter-reset: li; }
+    .program #program_instructions li {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 20px; }
+      .program #program_instructions li::after {
+        bottom: -75px;
+        color: white;
+        opacity: 0.8;
+        text-shadow: 1px 1px rgba(42, 49, 53, 0.2);
+        text-align: center;
+        font-weight: 900;
+        font-size: 16px;
+        counter-increment: li;
+        content: counter(li); }
+  .program .placeholder {
+    position: relative;
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    border: solid 1px white;
+    background: -webkit-linear-gradient(bottom, rgba(19, 23, 25, 0.3) 0%, rgba(42, 49, 53, 0.2) 100%);
+    background: linear-gradient(to top, rgba(19, 23, 25, 0.3) 0%, rgba(42, 49, 53, 0.2) 100%); }
+    .program .placeholder::before {
+      content: '';
+      height: 100%;
+      width: 100%;
+      border-radius: 50%;
+      border: solid 1px white;
+      -webkit-animation: grow 1s infinite ease-in-out forwards;
+              animation: grow 1s infinite ease-in-out forwards; }
+
+@-webkit-keyframes grow {
+  from {
+    height: 300%;
+    width: 300%;
+    opacity: 0; }
+  to {
+    height: 100%;
+    width: 100%;
+    opacity: 0.4; } }
+
+@keyframes grow {
+  from {
+    height: 300%;
+    width: 300%;
+    opacity: 0; }
+  to {
+    height: 100%;
+    width: 100%;
+    opacity: 0.4; } }
+  .program .instruction {
+    position: relative;
+    display: inline-block;
+    height: 80px;
+    width: 80px;
+    margin: 0 20px;
+    border-radius: 50%;
+    box-shadow: 1px 1px 1px rgba(42, 49, 53, 0.2);
+    -webkit-transition: box-shadow 0.3s, opacity 0.3s, background 0.3s;
+            transition: box-shadow 0.3s, opacity 0.3s, background 0.3s; }
+    .program .instruction.selected {
+      border: solid 1px white;
+      box-shadow: 3px 3px 3px rgba(42, 49, 53, 0.2); }
+    .program .instruction[data-direction='UP'] {
+      background: -webkit-linear-gradient(bottom, #fab601 0%, #fec630 100%);
+      background: linear-gradient(to top, #fab601 0%, #fec630 100%); }
+    .program .instruction[data-direction='LEFT'] {
+      background: -webkit-linear-gradient(bottom, #065393 0%, #086ec4 100%);
+      background: linear-gradient(to top, #065393 0%, #086ec4 100%); }
+    .program .instruction[data-direction='RIGHT'] {
+      background: -webkit-linear-gradient(bottom, #e22f14 0%, #ee533b 100%);
+      background: linear-gradient(to top, #e22f14 0%, #ee533b 100%); }
+    .program .instruction[data-direction='DOWN'] {
+      background: -webkit-linear-gradient(bottom, #a7bb28 0%, #c2d640 100%);
+      background: linear-gradient(to top, #a7bb28 0%, #c2d640 100%); }
+    .program .instruction::before {
+      content: attr(data-loop);
+      position: absolute;
+      bottom: -7px;
+      right: -7px;
+      height: 30px;
+      width: 30px;
+      line-height: 30px;
+      font-size: 16px;
+      color: #2a3135;
+      background: white;
+      box-shadow: 1px 1px 1px rgba(42, 49, 53, 0.2);
+      border-radius: 50%; }
+    .program .instruction[data-loop='1']::before {
+      display: none; }
+    .program .instruction .arrow {
+      font-size: 25px;
+      color: white;
+      pointer-events: none; }
+    .program .instruction .loop, .program .instruction .close {
+      z-index: -1;
+      height: 47px;
+      width: 47px;
+      color: #2a3135;
+      line-height: 47px;
+      opacity: 0;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 1px 1px rgba(42, 49, 53, 0.2);
+      border-radius: 50%;
+      -webkit-transition: all 0.3s;
+              transition: all 0.3s; }
+    .program .instruction.open .loop, .program .instruction.open .close {
+      opacity: 1; }
+    .program .instruction.open .loop {
+      -webkit-transform: translate(-50%, -100px);
+              transform: translate(-50%, -100px); }
+    .program .instruction.open .close {
+      -webkit-transform: translate(-50%, -160px);
+              transform: translate(-50%, -160px); }
+    .program .instruction.instruction_chosen {
+      box-shadow: 5px 5px 10px rgba(42, 49, 53, 0.2);
+      opacity: 1 !important; }
+    .program .instruction.instruction_ghost {
+      box-shadow: none;
+      background: -webkit-linear-gradient(bottom, rgba(19, 23, 25, 0.3) 0%, rgba(42, 49, 53, 0.2) 100%);
+      background: linear-gradient(to top, rgba(19, 23, 25, 0.3) 0%, rgba(42, 49, 53, 0.2) 100%); }
+      .program .instruction.instruction_ghost i {
+        display: none; }
+      .program .instruction.instruction_ghost::before {
+        content: '';
+        height: 100%;
+        width: 100%;
+        background: none;
+        border-radius: 50%;
+        border: solid 1px white;
+        -webkit-animation: grow 1s infinite ease-in-out forwards;
+                animation: grow 1s infinite ease-in-out forwards; }
+
+@keyframes grow {
+  from {
+    height: 300%;
+    width: 300%;
+    opacity: 0; }
+  to {
+    height: 100%;
+    width: 100%;
+    opacity: 0.4; } }
+    .program .instruction.unselected {
+      opacity: 0.6; }
+  .program #program_controls {
+    position: fixed;
+    bottom: 20px;
+    z-index: 1;
+    width: 100%;
+    height: 80px;
+    text-align: center; }
+    .program #program_controls .instruction {
+      margin-left: 20px;
+      margin-right: 20px; }
+    .program #program_controls .instruction:nth-child(1).animating {
+      -webkit-animation-duration: 1.2s;
+              animation-duration: 1.2s;
+      -webkit-animation-delay: 0s;
+              animation-delay: 0s; }
+    .program #program_controls .instruction:nth-child(2).animating {
+      -webkit-animation-duration: 0.8s;
+              animation-duration: 0.8s;
+      -webkit-animation-delay: 0.2s;
+              animation-delay: 0.2s; }
+    .program #program_controls .instruction:nth-child(3).animating {
+      -webkit-animation-duration: 1s;
+              animation-duration: 1s;
+      -webkit-animation-delay: 0.4s;
+              animation-delay: 0.4s; }
+    .program #program_controls .instruction:nth-child(4).animating {
+      -webkit-animation-duration: 0.9s;
+              animation-duration: 0.9s;
+      -webkit-animation-delay: 0.6s;
+              animation-delay: 0.6s; }
+  .program #program_trash {
+    position: fixed;
+    bottom: 20px;
+    left: 80px;
+    z-index: 50;
+    height: 80px;
+    width: 80px;
+    border: solid 1px white;
+    background: -webkit-linear-gradient(bottom, rgba(19, 23, 25, 0.2) 0%, rgba(42, 49, 53, 0.1) 100%);
+    background: linear-gradient(to top, rgba(19, 23, 25, 0.2) 0%, rgba(42, 49, 53, 0.1) 100%); }
+    .program #program_trash i {
+      opacity: 0.4;
+      color: white;
+      text-align: center;
+      font-size: 30px; }
+    .program #program_trash .instruction {
+      position: absolute;
+      display: none;
+      height: 10px;
+      width: 10px; }
+    .program #program_trash .hover {
+      background: red !important; }
+  .program #program_loop {
+    left: 80px;
+    right: 80px;
+    position: fixed;
+    padding: 0;
+    margin-top: -160px; }
+    .program #program_loop .ui-slider {
+      position: relative;
+      width: 100%;
+      padding: 0 15px; }
+      .program #program_loop .ui-slider .ui-slider-input {
+        top: -70px;
+        background: none;
+        color: white;
+        border: none;
+        text-align: center;
+        font-size: 25px; }
+      .program #program_loop .ui-slider .ui-slider-track {
+        position: relative;
+        width: 100%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.6); }
+      .program #program_loop .ui-slider .ui-slider-handle {
+        position: absolute;
+        top: 50%;
+        z-index: 2;
+        height: 30px;
+        width: 30px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 2px 2px 2px rgba(42, 49, 53, 0.2);
+        outline: none;
+        -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%); }
+      .program #program_loop .ui-slider .ui-slider-bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+        background: white;
+        -webkit-transition: all 0.3s;
+                transition: all 0.3s; }
+  .program .loop_number, .program .loop_icon {
+    display: inline-block;
+    color: white;
+    font-size: 40px; }

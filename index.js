@@ -32,7 +32,6 @@ app.set('view engine', 'jade');
 
 
 
-
 /**
  *
  * Socket
@@ -42,6 +41,24 @@ app.set('view engine', 'jade');
 const server = app.listen(port);
 
 
+
+
+
+/**
+ *
+ * Globals
+ *
+ */
+
+ var directions = [];
+
+ directions["UP"] = 0;
+ directions["RIGHT"] = 90;
+ directions["DOWN"] = 180;
+ directions["LEFT"] = 270;
+
+ var speed = 50;
+ var time = 500;
 
 
 
@@ -61,7 +78,7 @@ router.get('/', function(req, res, next) {
 
     console.log('=> USER CONNECTED');
 
-    //orb = new sphero("/dev/tty.Sphero-BBY-AMP-SPP", {emitPacketErrors: true, timeout: 300});
+    // orb = new sphero("/dev/tty.Sphero-BBY-AMP-SPP");
 
     // orb.connect(function() {
 
@@ -71,15 +88,37 @@ router.get('/', function(req, res, next) {
 
     //   io.emit('sp_connected', {msg:'Sphero connected !'});
 
-    //   orb.color("purple");
-
     //   orb.detectCollisions();
 
     //   orb.on("collision", function(data) {
 
     //     io.emit('sp_collision', {msg:'Sphero falled !'});
 
+    //     console.log(orb);
+    //     orb.color("red");
+
     //   });
+
+    //   socket.on('startCalibrate', function() {
+    //     console.log("  -> START CLAIBRATE !");
+
+    //     orb.startCalibration();
+    //   })
+
+    //   socket.on('endCalibrate', function() {
+    //     console.log("  -> END CLAIBRATE !");
+
+    //     orb.finishCalibration();
+    //     orb.color("green");
+    //   })
+
+    //   socket.on('roll', function(data) {
+    //     console.log("  -> ROLL !!!!!");
+
+    //     rollFor(data.message);
+
+    //     orb.color("blue");
+    //   })
 
     // });
    
@@ -96,6 +135,49 @@ router.get('/', function(req, res, next) {
   res.render('index');
 
 });
+
+
+
+
+
+/**
+ *
+ * ROLLFOR
+ *
+ */
+
+
+function rollFor (array) {
+
+  var interval, i = 0;
+
+  function dostuff() {
+      
+      if(i <= array.length ) { 
+
+        if ( i == array.length ) {
+
+          orb.roll(0, 0);
+
+        } else {
+
+          var direction = directions[array[i]];
+          console.log(direction)
+
+          orb.roll(speed, direction);
+
+        }
+
+        i++;
+
+      }
+
+      else clearInterval(interval);
+  }
+
+  interval = setInterval(dostuff, time);
+
+}
 
 
 

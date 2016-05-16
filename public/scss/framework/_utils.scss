@@ -27,3 +27,8 @@
 		@extend .alignX;
 		bottom: 40px;
 	}
+
+	.hide {
+		opacity: 0;
+		visibility: hidden;
+	}

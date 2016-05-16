@@ -22,6 +22,7 @@
 
 	@import url(https://fonts.googleapis.com/css?family=Raleway:400,700,400italic,300);
 	@import url(https://fonts.googleapis.com/css?family=Architects+Daughter);
+	@import url(https://fonts.googleapis.com/css?family=Lato:400,700,900,300);
 
 
 	$grid-gutter-width : 20px;
@@ -34,7 +35,9 @@
 
 	$red : #ee533b;
 	$blue : #1bbed4;
+	$dark-blue : #086ec4;
 	$yellow : #fec630;
+	$green : #c2d640;
 	$black : #2a3135;
 
 	@import "framework/reset";
@@ -62,7 +65,7 @@
 		user-select: none;
 	}
 
-	html, body, main {
+	html, body, main, .ui-page {
 		height: 100%;
 		width: 100%;
 		position: relative;
@@ -78,7 +81,7 @@
 		font-size: 18px;
 		line-height: 1.5;
 
-		font-family: 'Raleway', sans-serif;
+		font-family: 'Lato', sans-serif;
 
 		background-image: url("../img/back.jpg");
 		background-size: cover;
