@@ -16501,6 +16501,7 @@ jQuery(function ($) {
 					// GO TO PROGRAM FROM CALIBRATE
 
 					socket.emit('endCalibrate');
+
 					tuto.hide(program.show);
 				} else if (tuto.slideIndex == 0) {
 					// GO TO CALIBRATE FROM CREATE
@@ -16539,6 +16540,8 @@ jQuery(function ($) {
 
 			instructions: [],
 			sortables: [],
+			playing: false,
+			error: null,
 
 			dom: {
 				program: $("#program"),
@@ -16546,14 +16549,34 @@ jQuery(function ($) {
 				controls: $("#program_controls"),
 				instructions: $("#program_instructions"),
 				loop: $('#program_loop'),
-				slider: $("#slider-step")
+				slider: $("#slider-step"),
+
+				playing: $("#program_playing"),
+
+				playing_section_roll: $("#playing_section_roll"),
+				playing_cancel: $("#playing_cancel"),
+
+				playing_section_success: $("#playing_section_success"),
+				playing_reset: $("#playing_reset"),
+
+				playing_section_fail: $("#playing_section_fail"),
+				playing_correct: $("#playing_correct"),
+
+				playing_section_calibrate: $("#playing_section_calibrate"),
+				playing_continue: $("#playing_continue")
 			},
 
 			init: function init() {
 				console.log("-> Program init !");
 
-				program.dom.play.click(program.play);
 				program.dom.slider.change(program.changeLoop);
+
+				program.dom.play.click(program.play);
+
+				program.dom.playing_cancel.click(program.playingCancel);
+				program.dom.playing_reset.click(program.playingReset);
+				program.dom.playing_correct.click(program.playingCorrect);
+				program.dom.playing_continue.click(program.playingContinue);
 
 				$(document).on('click', '#program_instructions .instruction', function (event) {
 					program.onInstructionClicked(event);
@@ -16578,6 +16601,12 @@ jQuery(function ($) {
 					onEnd: function onEnd(evt) {
 						evt.oldIndex;
 						evt.newIndex;
+
+						if (program.dom.instructions.find('.instruction').length === 0) {
+							TweenMax.to(program.dom.play, 0.2, { autoAlpha: 0 });
+						} else {
+							TweenMax.to(program.dom.play, 0.2, { autoAlpha: 1 });
+						}
 					},
 
 					onAdd: function onAdd(evt) {
@@ -16587,6 +16616,12 @@ jQuery(function ($) {
 
 						TweenMax.killTweensOf(program.dom.program);
 						TweenMax.to(program.dom.program, 1, { scrollTo: { x: scroll, ease: Expo.easeOut } });
+
+						if (program.dom.instructions.find('.instruction').length === 0) {
+							TweenMax.to(program.dom.play, 0.3, { autoAlpha: 0 });
+						} else {
+							TweenMax.to(program.dom.play, 0.3, { autoAlpha: 1 });
+						}
 					},
 
 					onSort: function onSort(evt) {},
@@ -16654,7 +16689,7 @@ jQuery(function ($) {
 			show: function show() {
 				console.log("-> Program show !");
 
-				TweenMax.to(program.dom.program, 0.3, { autoAlpha: 1 });
+				TweenMax.to(program.dom.program, 0.3, { autoAlpha: 1, ease: Expo.easeInOut });
 			},
 			onInstructionClicked: function onInstructionClicked(event) {
 				var el = $(event.target);
@@ -16666,7 +16701,7 @@ jQuery(function ($) {
 					if (program.dom.instructions.find('.selected').length === 0) {
 						// IF IT WAS THE LAST ONE, HIDE LOOP
 
-						TweenMax.to(program.dom.loop, 0.3, { autoAlpha: 0 });
+						TweenMax.to(program.dom.loop, 0.3, { autoAlpha: 0, ease: Expo.easeInOut });
 					} else if (program.dom.instructions.find('.selected').length === 1) {
 						// IF THERE IS ONLY ONE LEFT, HIDE FX AND DISPLAY LOOP
 
@@ -16674,7 +16709,7 @@ jQuery(function ($) {
 
 						program.dom.slider.val(loops).slider('refresh');
 
-						TweenMax.to(program.dom.loop, 0.3, { autoAlpha: 1 });
+						TweenMax.to(program.dom.loop, 0.3, { autoAlpha: 1, ease: Expo.easeInOut });
 					}
 				} else if (!el.hasClass('selected')) {
 					el.addClass('selected');
@@ -16682,7 +16717,7 @@ jQuery(function ($) {
 					if (program.dom.instructions.find('.selected').length > 1) {
 						// IF THERE IS MORE THAN ONE SELECTED, HIDE LOOP DISPLAY FX
 
-						TweenMax.to(program.dom.loop, 0.3, { autoAlpha: 0 });
+						TweenMax.to(program.dom.loop, 0.3, { autoAlpha: 0, ease: Expo.easeInOut });
 					} else {
 						// IF HE IS THE FIRST ONE, SHOW LOOP
 
@@ -16690,7 +16725,7 @@ jQuery(function ($) {
 
 						program.dom.slider.val(_loops).slider('refresh');
 
-						TweenMax.to(program.dom.loop, 0.3, { autoAlpha: 1 });
+						TweenMax.to(program.dom.loop, 0.3, { autoAlpha: 1, ease: Expo.easeInOut });
 					}
 				}
 			},
@@ -16701,6 +16736,9 @@ jQuery(function ($) {
 				el.attr("data-loop", loops);
 			},
 			play: function play() {
+
+				program.playing = true;
+
 				program.instructions = [];
 				program.dom.instructions.find('.instruction').each(function (index, el) {
 
@@ -16713,14 +16751,74 @@ jQuery(function ($) {
 					}
 				});
 
-				console.log(program.instructions);
+				program.dom.program.addClass('blur');
+
+				var timeline = new TimelineMax().to(program.dom.playing, 0.3, { autoAlpha: 1, ease: Expo.easeInOut }).to(program.dom.playing_section_roll, 0.3, { autoAlpha: 1, ease: Expo.easeInOut });
 
 				socket.emit('roll', { message: program.instructions });
+			},
+
+
+			// ROLL
+			playingCancel: function playingCancel() {
+				socket.emit('stopRoll');
+
+				var timeline = new TimelineMax().to(program.dom.playing_section_roll, 0.3, { autoAlpha: 0, ease: Expo.easeInOut }).to(program.dom.playing_section_calibrate, 0.3, { autoAlpha: 1, ease: Expo.easeInOut });
+
+				socket.emit('startCalibrate');
+			},
+
+
+			// SUCCESS
+			onSuccess: function onSuccess(data) {
+
+				if (program.playing) {
+					var timeline = new TimelineMax().to(program.dom.playing_section_roll, 0.3, { autoAlpha: 0, ease: Expo.easeInOut }).to(program.dom.playing_section_success, 0.3, { autoAlpha: 1, ease: Expo.easeInOut });
+				}
+			},
+			playingReset: function playingReset() {
+				program.dom.instructions.empty();
+
+				var timeline = new TimelineMax().to(program.dom.playing_section_success, 0.3, { autoAlpha: 0, ease: Expo.easeInOut }).to(program.dom.playing_section_calibrate, 0.3, { autoAlpha: 1, ease: Expo.easeInOut });
+
+				socket.emit('startCalibrate');
+			},
+
+
+			// FAIL
+			onCollision: function onCollision(data) {
+
+				if (program.playing) {
+					var timeline = new TimelineMax().to(program.dom.playing_section_roll, 0.3, { autoAlpha: 0, ease: Expo.easeInOut }).to(program.dom.playing_section_fail, 0.3, { autoAlpha: 1, ease: Expo.easeInOut });
+				}
+			},
+			playingCorrect: function playingCorrect() {
+
+				//
+				// CIBLER ERREUR ET Y SCROLLER
+				//
+
+				var timeline = new TimelineMax().to(program.dom.playing_section_fail, 0.3, { autoAlpha: 0, ease: Expo.easeInOut }).to(program.dom.playing_section_calibrate, 0.3, { autoAlpha: 1, ease: Expo.easeInOut });
+
+				socket.emit('startCalibrate');
+			},
+
+
+			// CALIBRATE
+			playingContinue: function playingContinue() {
+
+				socket.emit('endCalibrate');
+
+				program.playing = false;
+
+				program.dom.program.removeClass('blur');
+
+				var timeline = new TimelineMax().to(program.dom.playing_section_calibrate, 0.3, { autoAlpha: 0, ease: Expo.easeInOut }).to(program.dom.playing, 0.3, { autoAlpha: 0, ease: Expo.easeInOut });
 			},
 			hide: function hide() {
 				console.log("-> Program hide !");
 
-				TweenMax.to(program.dom.program, 0.3, { autoAlpha: 0 });
+				TweenMax.to(program.dom.program, 0.3, { autoAlpha: 0, ease: Expo.easeInOut });
 			}
 		};
 
@@ -16745,10 +16843,18 @@ jQuery(function ($) {
 			socket = io.connect(window.location.href);
 			socket.emit('hello', { message: 'hello' });
 
+			socket.on('sp_success', function () {
+				program.onSuccess();
+			});
+
+			socket.on('sp_collision', function (data) {
+				program.onCollision(data);
+			});
+
 			//
 			// DISPLAY SHOW
 
-			program.show();
+			splash.show();
 		}
 
 		init();

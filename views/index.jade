@@ -36,7 +36,7 @@ block content
 
 
 		section#program.program
-			img#program_play(src="img/play.svg", alt="")
+			i#program_play.fa.fa-play(aria-hidden="true")
 
 			ul#program_instructions.intructions
 
@@ -58,6 +58,28 @@ block content
 
 			#program_loop
 				input#slider-step(type="range" name="slider-step" value="1" min="1" max="9" step="1" data-highlight="true")
+
+		section#program_playing
+			#playing_section_roll.program_playing_content
+				img.rooool(src="img/algo.png")
+				p.desc Execution du programme en cours ...
+				p#playing_cancel.btn.btn-alert(href="#") STOP !
+
+			#playing_section_success.program_playing_content
+				img(src="img/success.png")
+				p.desc Super ! Tu as réussis à programmer Algo !
+				p#playing_reset.btn(href="#") Continuer
+
+			#playing_section_fail.program_playing_content
+				img(src="img/fail.png")
+				p.desc Ooops ! Il y a un bug dans ton programme :/
+				p#playing_correct.btn(href="#") Corriger
+
+			#playing_section_calibrate.program_playing_content
+				img(src="img/calibrate.png")
+				p.desc Pour continuer, repose Algo sur la première case, la lumière bleue tournée vers le bas.
+				p#playing_continue.btn(href="#") Continuer
+
 
 
 

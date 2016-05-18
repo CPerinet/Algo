@@ -6,14 +6,28 @@
 
 	overflow-x: scroll;
 
+	&.blur {
+		filter: blur(10px);
+	}
 
 	#program_play {
 		@extend .alignX;
+		@extend .hide;
+
 		position: fixed;
 
-		top: 10px;
-		width: 40px;
+		top: 15px;
 
+		height: 60px;
+		width: 60px;
+		
+		text-align: center;
+		line-height: 60px;
+
+		border-radius: 50%;
+		border: solid 1px white;
+		background: linear-gradient( to top, rgba(darken(white, 10%), 0.7) 0%, rgba(white,0.4) 100%);
+		box-shadow: 1px 1px 1px rgba($black, 0.2);
 	}
 
 	#program_instructions {
@@ -435,6 +449,55 @@
 		display: inline-block;
 		color: white;
 		font-size: 40px;
-	}
-	
+	}	
 }
+
+	// Besause blur
+	#program_playing {
+		@extend .full;
+		@extend .hide;
+		position: fixed;
+
+		z-index: 60;
+		background: rgba($black, 0.8);
+
+		.program_playing_content {
+
+			@extend .alignXY;
+			@extend .hide;
+
+			width: 700px;
+			text-align: center;
+
+			img {
+				width: 200px;
+				display: block;
+				margin: 0 auto 30px auto;
+			}
+
+			.desc {
+				padding: 10px;
+				color: white;
+				text-align: center;
+			}
+
+			.btn {
+				display: inline-block;
+			}
+
+		}
+
+		.rooool {
+			animation: roll 0.9s linear infinite;
+		}
+
+		@keyframes roll {
+			from {
+				transform: rotate(0);
+			}
+
+			to {
+				transform: rotate(360deg);
+			}
+		}
+	}

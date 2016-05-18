@@ -55,7 +55,7 @@ table {
   border-collapse: collapse;
   border-spacing: 0; }
 
-.alignXY, .splash_logo, .program .placeholder::before, .program .instruction .arrow, .program .instruction .loop, .program .instruction .close, .program .instruction.instruction_ghost::before, .program #program_trash i {
+.alignXY, .splash_logo, .program .placeholder::before, .program .instruction .arrow, .program .instruction .loop, .program .instruction .close, .program .instruction.instruction_ghost::before, .program #program_trash i, #program_playing .program_playing_content {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -74,7 +74,7 @@ table {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%); }
 
-.full, .splash, .tuto, .program {
+.full, .splash, .tuto, .program, #program_playing {
   position: absolute;
   top: 0;
   left: 0;
@@ -84,7 +84,7 @@ table {
 .alignB {
   bottom: 40px; }
 
-.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_loop {
+.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_play, .program #program_loop, #program_playing, #program_playing .program_playing_content {
   opacity: 0;
   visibility: hidden; }
 
@@ -153,7 +153,7 @@ p {
   padding: 100px;
   margin: 0 auto; }
 
-.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_loop {
+.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_play, .program #program_loop, #program_playing, #program_playing .program_playing_content {
   opacity: 0;
   visibility: hidden; }
 
@@ -219,14 +219,14 @@ p {
   .tuto_video {
     display: inline-block;
     vertical-align: middle;
-    width: 40%; }
+    width: 40%;
+    display: none; }
   .tuto_instructions {
     display: inline-block;
     vertical-align: middle;
-    width: 60%;
+    width: 100%;
     color: white; }
     .tuto_instructions h1 {
-      font-family: 'Architects Daughter', cursive;
       font-size: 40px; }
   .tuto #tuto_controls .btn {
     -webkit-transform: translate(0, 200px);
@@ -235,10 +235,21 @@ p {
 .program {
   background: rgba(27, 190, 212, 0.6);
   overflow-x: scroll; }
+  .program.blur {
+    -webkit-filter: blur(10px);
+            filter: blur(10px); }
   .program #program_play {
     position: fixed;
-    top: 10px;
-    width: 40px; }
+    top: 15px;
+    height: 60px;
+    width: 60px;
+    text-align: center;
+    line-height: 60px;
+    border-radius: 50%;
+    border: solid 1px white;
+    background: -webkit-linear-gradient(bottom, rgba(230, 230, 230, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
+    background: linear-gradient(to top, rgba(230, 230, 230, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
+    box-shadow: 1px 1px 1px rgba(42, 49, 53, 0.2); }
   .program #program_instructions {
     position: absolute;
     top: 50%;
@@ -500,3 +511,40 @@ p {
     display: inline-block;
     color: white;
     font-size: 40px; }
+
+#program_playing {
+  position: fixed;
+  z-index: 60;
+  background: rgba(42, 49, 53, 0.8); }
+  #program_playing .program_playing_content {
+    width: 700px;
+    text-align: center; }
+    #program_playing .program_playing_content img {
+      width: 200px;
+      display: block;
+      margin: 0 auto 30px auto; }
+    #program_playing .program_playing_content .desc {
+      padding: 10px;
+      color: white;
+      text-align: center; }
+    #program_playing .program_playing_content .btn {
+      display: inline-block; }
+  #program_playing .rooool {
+    -webkit-animation: roll 0.9s linear infinite;
+            animation: roll 0.9s linear infinite; }
+
+@-webkit-keyframes roll {
+  from {
+    -webkit-transform: rotate(0);
+            transform: rotate(0); }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+@keyframes roll {
+  from {
+    -webkit-transform: rotate(0);
+            transform: rotate(0); }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
