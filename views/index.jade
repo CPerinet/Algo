@@ -36,9 +36,13 @@ block content
 
 
 		section#program.program
-			i#program_play.fa.fa-play(aria-hidden="true")
 
-			ul#program_instructions.intructions
+			#program_navbar
+			
+			#program_instructions_container
+				ul#program_instructions.intructions
+				
+			i#program_play.fa.fa-play(aria-hidden="true")
 
 			ul#program_controls
 				li.instruction.open(data-direction="UP" data-loop="1")

@@ -16342,14 +16342,6 @@ jQuery(function ($) {
 
 		/**
    *
-   * General
-   *
-   */
-
-		//let state = 0
-
-		/**
-   *
    * Splash
    *
    */
@@ -16584,7 +16576,7 @@ jQuery(function ($) {
 
 				var sortable_i = new Sortable(program_instructions, {
 					group: { name: "group1", pull: true, put: true },
-					animation: 300,
+					animation: 0,
 
 					scroll: program.dom.program[0],
 					scrollSensitivity: 130,
@@ -16634,7 +16626,7 @@ jQuery(function ($) {
 				var sortable_c = new Sortable(program_controls, {
 					group: { name: "group1", pull: 'clone', put: false },
 					sort: false,
-					animation: 300,
+					animation: 0,
 
 					scroll: program.dom.program[0],
 					scrollSensitivity: 130,
@@ -16670,7 +16662,7 @@ jQuery(function ($) {
 				var sortable_t = new Sortable(program_trash, {
 					group: { name: "group1", pull: false, put: true },
 					sort: false,
-					animation: 300,
+					animation: 0,
 
 					ghostClass: "hover",
 					chosenClass: "hover",
@@ -16861,17 +16853,6 @@ jQuery(function ($) {
 		init();
 	});
 });
-
-// socket.on('sp_connect', function (data) {
-//        if(data) {
-//        	console.log(data);
-//        }
-//        else console.log("There is a problem:", data)
-//    })
-
-//    $(".send").click( () => {
-//    	socket.emit('send', { message: $(".field").val() })
-//    })
 
 /**
  *
