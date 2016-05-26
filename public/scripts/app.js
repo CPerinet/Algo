@@ -16789,6 +16789,7 @@ jQuery(function ($) {
 			onCollision: function onCollision(data) {
 
 				if (program.playing) {
+
 					var timeline = new TimelineMax().to(program.dom.playing_section_roll, 0.3, { autoAlpha: 0, ease: Expo.easeInOut }).to(program.dom.playing_section_fail, 0.3, { autoAlpha: 1, ease: Expo.easeInOut });
 				}
 			},
@@ -16847,14 +16848,14 @@ jQuery(function ($) {
 				program.onSuccess();
 			});
 
-			socket.on('sp_collision', function (data) {
-				program.onCollision(data);
+			socket.on('sp_collision', function () {
+				program.onCollision();
 			});
 
 			//
 			// DISPLAY SHOW
 
-			splash.show();
+			program.show();
 		}
 
 		init();

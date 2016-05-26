@@ -5,16 +5,6 @@ jQuery(function($) {
 
 	$(window).load( () => {
 
-		/**
-		 *
-		 * General
-		 *
-		 */
-
-		//let state = 0
-
-
-
 
 		/**
 		 *
@@ -537,6 +527,7 @@ jQuery(function($) {
 			onCollision(data) {
 
 				if ( program.playing ) {
+
 					let timeline = new TimelineMax()
 					.to(program.dom.playing_section_roll, 0.3, {autoAlpha: 0, ease: Expo.easeInOut})
 					.to(program.dom.playing_section_fail, 0.3, {autoAlpha: 1, ease: Expo.easeInOut})	
@@ -611,15 +602,15 @@ jQuery(function($) {
 				program.onSuccess()
 			})
 				
-			socket.on('sp_collision', (data) => {
-				program.onCollision(data)
+			socket.on('sp_collision', () => {
+				program.onCollision()
 			})
 
 
 			//
 			// DISPLAY SHOW
 
-			splash.show()
+			program.show()
 
 		}
 

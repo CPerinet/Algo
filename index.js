@@ -57,8 +57,8 @@ const server = app.listen(port);
  directions["DOWN"] = 180;
  directions["LEFT"] = 270;
 
- var speed = 50;
- var time = 500;
+ //  var speed = 45;
+ // var time = 500;
 
 
 
@@ -70,8 +70,6 @@ const server = app.listen(port);
 
 router.get('/', function(req, res, next) {
 
-  //io.emit('sp_connect', {msg:'Sphero connected !'});
-
   var io = require('socket.io')(server);
   var collision = false;
 
@@ -79,51 +77,58 @@ router.get('/', function(req, res, next) {
 
     console.log('=> USER CONNECTED');
 
-    orb = new sphero("/dev/tty.Sphero-BBY-AMP-SPP");
+    //orb = new sphero("/dev/tty.Sphero-BBY-AMP-SPP", {emitPacketErrors: true});
 
-    orb.connect(function() {
+  //   orb.connect(function() {
 
-      orb.color("blue");
+  //     // Init color
+  //     orb.color("blue");
 
-      orb.on("error", function(err, data) {
-        console.log ( err, data );
-      });
+  //     // Init events
+  //     orb.detectCollisions();
 
-      io.emit('sp_connected', {msg:'Sphero connected !'});
 
-      orb.detectCollisions();
 
-      orb.on("collision", function(data) {
+  //     io.emit('sp_connected', {msg:'Sphero connected !'});
 
-        io.emit('sp_collision');
-        collision = true;
-        console.log("FAIL !!");
-        orb.color("red");
+      
 
-      });
+  //     orb.on("collision", function(data) {
 
-      socket.on('startCalibrate', function() {
-        console.log("  -> START CLAIBRATE !");
+  //       io.emit('sp_collision');
+  //       collision = true;
+  //       console.log("COLLISION");
+  //       orb.color("red");
 
-        orb.startCalibration();
-      })
+  //     });
 
-      socket.on('endCalibrate', function() {
-        console.log("  -> END CLAIBRATE !");
+  //     socket.on('startCalibrate', function() {
+  //       console.log("START CLAIBRATE");
 
-        orb.finishCalibration();
-        orb.color("blue");
-      })
+  //       orb.startCalibration();
+  //     })
 
-      socket.on('roll', function(data) {
-        console.log("  -> ROLL !!!!!");
+  //     socket.on('endCalibrate', function() {
+  //       console.log("END CLAIBRATE");
 
-        rollFor(data.message);
+  //       orb.finishCalibration();
+  //       orb.color("blue");
+  //     })
 
-        orb.color("blue");
-      })
+  //     socket.on('roll', function(data) {
+  //       console.log("ROLL");
 
-    });
+  //       orb.color("yellow");
+  //       doInstructions(data.message);
+
+  //     })
+
+  //     // Error handler
+  //     orb.on("error", function(err, data) {
+  //       console.log ( err, data );
+  //     });
+
+  //   });
    
     socket.on('hello', function() {
       console.log("  -> User says hello !")
@@ -137,78 +142,99 @@ router.get('/', function(req, res, next) {
 
   res.render('index');
 
-  /**
-   *
-   * ROLLFOR
-   *
-   */
+});
 
 
-  function rollFor (array) {
+function doInstructions ( instructions ) {
 
-    var interval, i = 0;
+  var index = 0;
+  var prevDirection = 0;
+  var currentDirection = 0;
 
-    function dostuff() {
+  function init () {
 
-      if ( !collision ) {
+    console.log('- new');
 
-        if(i <= array.length ) { 
+    var currentDirection = directions[ instructions[index] ];
 
-          if ( i == array.length ) {
-
-            orb.roll(0, 0);
-            io.emit('sp_success');
-            orb.color("green");
-            console.log("SUCCESS !!");
-
-          } else {
-
-            var direction = directions[array[i]];
-            orb.roll(speed, direction);
-
-          }
-
-          i++;
-
-        } else clearInterval(interval);
-
-      } else {
-
-        clearInterval(interval);
-        orb.roll(0, 0);
-        collision = false;
-
-      }
-        
-    }
-
-    interval = setInterval(dostuff, time);
+    if ( prevDirection === currentDirection ) roll();
+    else rotate();
 
   }
 
-});
+  function rotate () {
+
+    console.log('-- rotate');
+
+    orb.roll(100, currentDirection);
+    prevDirection = currentDirection;
+    setTimeout( roll, 100)
+
+  }
+
+  function roll () {
+
+    console.log('-- roll');
+
+    orb.roll(55, currentDirection);
+    setTimeout( sleep, 575);
+
+  }
+
+  function sleep () {
+
+    console.log('-- sleep');
+
+    orb.roll(0,0);
+    setTimeout( end, 1000 );
+
+  }
+
+  function end () {
+
+    console.log('-- end');
+
+    index ++;
+
+    if ( index < array.length ) {
+
+      init();
+
+    } else success();
+
+  } 
+
+  function success () {
+
+    console.log('-- success');
+
+    io.emit('sp_success');
+    orb.color("green");
+
+  }
+
+}
+
+
+
+// var t1, t2;
 
 
 
 
 
+// function collision () {
+
+//   clearInterval(t1);
+//   clearInterval(t2);
+
+//   collision = true;
+
+// }
 
 
 
 
-
-
-/**
- *
- * 404
- *
- */
-
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
 
 
 
