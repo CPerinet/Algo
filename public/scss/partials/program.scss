@@ -22,14 +22,13 @@
 	}
 
 	#program_play {
-		@extend .alignY;
-		position: absolute;
 
-		z-index: 5;
+		@extend .alignY;
+		position: fixed;
+		right: 40px;
+		z-index: 15;
 
 		@extend .hide;
-
-		right: 40px;
 
 		margin-top: -50px;
 
@@ -42,23 +41,31 @@
 
 		border-radius: 50%;
 		border: solid 1px $black;
-		background: linear-gradient( to top, rgba(darken($black, 3%), 1) 0%, rgba($black,0.9) 100%);
-		box-shadow: 1px 1px 1px rgba($black, 0.2);
+		background: linear-gradient( to top, darken($black, 3%) 0%, $black 100%);
+		box-shadow: 0px 0px 80px rgba($black, 0.8);
+
+		// &::after {
+		// 	content: '';
+	
+		// 	@extend .alignXY;
+
+		// 	height: 90%;
+		// 	width: 90%;
+
+		// 	border-radius: 50%;
+		// 	border: solid 1px white;
+
+		// 	animation: grow 1.2s infinite ease-in-out forwards;
+		// }
 	}
 
 	#program_instructions {
 
-		&_container {
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 50px;
-			bottom: 0;
-		}
-
 		position: absolute;
 		top: 0;
 		left: 0;
+
+		overflow: hidden;
 
 		display: flex;
 
@@ -100,7 +107,7 @@
 
 			margin-top: -50px;
 
-			width: 50px;
+			width: 200px;
 			height: 1px;
 
 			background: rgba( white, 0.5 );
@@ -110,7 +117,7 @@
 
 		@keyframes timeline {
 			from {
-				left: -50px;
+				left: -200px;
 			}
 
 			to {
@@ -127,7 +134,7 @@
 			&::after{
 
 				@extend .alignX;
-				bottom: -75px;
+				bottom: -250px;
 				color: white;
 				opacity: 0.8;
 				text-shadow: 1px 1px rgba($black, 0.2);
@@ -170,14 +177,14 @@
 
 	@keyframes grow {
 		from {
-			height: 300%;
-			width: 300%;
+			height: 200%;
+			width: 200%;
 			opacity: 0;
 		}
 
 		to {
-			height: 100%;
-			width: 100%;
+			height: 90%;
+			width: 90%;
 			opacity: 0.4;
 		}
 	}
@@ -186,6 +193,8 @@
 
 		position: relative;
 		display: inline-block;
+
+		z-index: 10;
 
 		height: 80px;
 		width: 80px;
@@ -200,7 +209,6 @@
 
 
 		&.selected {
-			border: solid 1px white;
 			box-shadow: 0px 0px 40px rgba(white, 0.8);
 		}
 
@@ -219,6 +227,42 @@
 
 		&[data-direction='DOWN'] {
 			background: linear-gradient( to top, darken($green, 10%) 0%, $green 100%);
+		}
+
+		.more, .less {
+			@extend .alignX;
+			@extend .hide;
+
+			height: 35px;
+			width: 35px;
+
+			color: white;
+			font-size: 14px;
+			line-height: 35px;
+
+			border-radius: 50%;
+			border: 1px solid white;
+
+		}
+
+		&.selected {
+			.more, .less {
+				opacity: 1;
+				visibility: visible;
+			}
+
+			&[data-loop='1'] .less {
+				opacity: 0;
+				visibility: hidden;
+			}
+		}
+
+		.more {
+			top: -55px;
+		}
+
+		.less {
+			bottom: -55px;
 		}
 
 		&::before {
@@ -292,8 +336,12 @@
 		&.instruction_chosen {
 
 			//transform: none;
-			box-shadow: 5px 5px 10px rgba($black, 0.2);
+			box-shadow: 0px 0px 5px rgba($black, 0.2);
 			opacity: 1 !important;
+
+			&::after {
+				display: none;
+			}
 
 
 		}
@@ -308,7 +356,8 @@
 		&.instruction_ghost {
 
 			box-shadow: none;
-			background: linear-gradient( to top, rgba(darken($black, 10%), 0.3) 0%, rgba($black,0.2) 100%);
+			background: linear-gradient( to top, rgba(darken($black, 10%), 0.5) 0%, rgba($black,0.4) 100%);
+			z-index: 5;
 			
 			i {
 				display: none;
@@ -355,7 +404,7 @@
 	#program_controls {
 		position: fixed;
 		bottom: 0;
-		z-index: 1;
+		z-index: 10;
 
 		display: flex;
 		justify-content: center;
@@ -366,8 +415,8 @@
 		padding-bottom: 20px;
 		padding-top: 20px;
 
-		background: rgba(white, 0.2);
-		border-top: 1px solid rgba(white, 0.3);
+		background: rgba(white, 0.15);
+		//border-top: 1px solid rgba(white, 0.2);
 		
 		text-align: center;
 
@@ -375,6 +424,9 @@
 
 			margin-left: 20px;
 			margin-right: 20px;
+
+			position: relative;
+			z-index: 200;
 
 		}
 
@@ -411,22 +463,23 @@
 	}
 
 	#program_trash {
+
+		@extend .hide;
 	
 		position: fixed;
-		bottom: 20px;
-		left: 80px;
+		bottom: 0px;
+		left: 0px;
 		z-index: 50;
 
-		height: 80px;
-		width: 80px;
+		height: 120px;
+		width: 220px;
 
-		border: solid 1px white;
-		background: linear-gradient( to top, rgba(darken($black, 10%), 0.2) 0%, rgba($black,0.1) 100%);
+		background: linear-gradient( to top, rgba(darken($red, 10%), 0.8) 0%, rgba($red,0.75) 100%);
 
 		i {
 			@extend .alignXY;
 
-			opacity: 0.4;
+			opacity: 0.8;
 
 			color: white;
 			text-align: center;

@@ -62,7 +62,7 @@ table {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%); }
 
-.alignX, .alignB, .splash_next, .program #program_instructions li::after, .program #program_loop .ui-slider .ui-slider-input {
+.alignX, .alignB, .splash_next, .program #program_instructions li::after, .program .instruction .more, .program .instruction .less, .program #program_loop .ui-slider .ui-slider-input {
   position: absolute;
   left: 50%;
   -webkit-transform: translateX(-50%);
@@ -84,7 +84,7 @@ table {
 .alignB {
   bottom: 40px; }
 
-.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_play, .program #program_loop, #program_playing, #program_playing .program_playing_content {
+.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_play, .program .instruction .more, .program .instruction .less, .program #program_trash, .program #program_loop, #program_playing, #program_playing .program_playing_content {
   opacity: 0;
   visibility: hidden; }
 
@@ -153,7 +153,7 @@ p {
   padding: 100px;
   margin: 0 auto; }
 
-.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_play, .program #program_loop, #program_playing, #program_playing .program_playing_content {
+.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_play, .program .instruction .more, .program .instruction .less, .program #program_trash, .program #program_loop, #program_playing, #program_playing .program_playing_content {
   opacity: 0;
   visibility: hidden; }
 
@@ -246,9 +246,9 @@ p {
     width: 100%;
     border-top: 20px solid rgba(42, 49, 53, 0.2); }
   .program #program_play {
-    position: absolute;
-    z-index: 5;
+    position: fixed;
     right: 40px;
+    z-index: 15;
     margin-top: -50px;
     height: 60px;
     width: 60px;
@@ -257,13 +257,14 @@ p {
     color: white;
     border-radius: 50%;
     border: solid 1px #2a3135;
-    background: -webkit-linear-gradient(bottom, #23292c 0%, rgba(42, 49, 53, 0.9) 100%);
-    background: linear-gradient(to top, #23292c 0%, rgba(42, 49, 53, 0.9) 100%);
-    box-shadow: 1px 1px 1px rgba(42, 49, 53, 0.2); }
+    background: -webkit-linear-gradient(bottom, #23292c 0%, #2a3135 100%);
+    background: linear-gradient(to top, #23292c 0%, #2a3135 100%);
+    box-shadow: 0px 0px 80px rgba(42, 49, 53, 0.8); }
   .program #program_instructions {
     position: absolute;
     top: 0;
     left: 0;
+    overflow: hidden;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -275,12 +276,6 @@ p {
         -ms-flex-align: center;
             align-items: center;
     counter-reset: li; }
-    .program #program_instructions_container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 50px;
-      bottom: 0; }
     .program #program_instructions::before {
       content: "";
       position: absolute;
@@ -295,7 +290,7 @@ p {
       position: absolute;
       top: 50%;
       margin-top: -50px;
-      width: 50px;
+      width: 200px;
       height: 1px;
       background: rgba(255, 255, 255, 0.5);
       -webkit-animation: timeline 2s infinite;
@@ -303,13 +298,13 @@ p {
 
 @-webkit-keyframes timeline {
   from {
-    left: -50px; }
+    left: -200px; }
   to {
     left: 100%; } }
 
 @keyframes timeline {
   from {
-    left: -50px; }
+    left: -200px; }
   to {
     left: 100%; } }
     .program #program_instructions li {
@@ -318,7 +313,7 @@ p {
       vertical-align: middle;
       margin: 0 20px; }
       .program #program_instructions li::after {
-        bottom: -75px;
+        bottom: -250px;
         color: white;
         opacity: 0.8;
         text-shadow: 1px 1px rgba(42, 49, 53, 0.2);
@@ -346,26 +341,27 @@ p {
 
 @-webkit-keyframes grow {
   from {
-    height: 300%;
-    width: 300%;
+    height: 200%;
+    width: 200%;
     opacity: 0; }
   to {
-    height: 100%;
-    width: 100%;
+    height: 90%;
+    width: 90%;
     opacity: 0.4; } }
 
 @keyframes grow {
   from {
-    height: 300%;
-    width: 300%;
+    height: 200%;
+    width: 200%;
     opacity: 0; }
   to {
-    height: 100%;
-    width: 100%;
+    height: 90%;
+    width: 90%;
     opacity: 0.4; } }
   .program .instruction {
     position: relative;
     display: inline-block;
+    z-index: 10;
     height: 80px;
     width: 80px;
     margin: 0 20px;
@@ -374,7 +370,6 @@ p {
     -webkit-transition: box-shadow 0.3s, opacity 0.3s, background 0.3s;
             transition: box-shadow 0.3s, opacity 0.3s, background 0.3s; }
     .program .instruction.selected {
-      border: solid 1px white;
       box-shadow: 0px 0px 40px rgba(255, 255, 255, 0.8); }
     .program .instruction[data-direction='UP'] {
       background: -webkit-linear-gradient(bottom, #fab601 0%, #fec630 100%);
@@ -388,6 +383,24 @@ p {
     .program .instruction[data-direction='DOWN'] {
       background: -webkit-linear-gradient(bottom, #a7bb28 0%, #c2d640 100%);
       background: linear-gradient(to top, #a7bb28 0%, #c2d640 100%); }
+    .program .instruction .more, .program .instruction .less {
+      height: 35px;
+      width: 35px;
+      color: white;
+      font-size: 14px;
+      line-height: 35px;
+      border-radius: 50%;
+      border: 1px solid white; }
+    .program .instruction.selected .more, .program .instruction.selected .less {
+      opacity: 1;
+      visibility: visible; }
+    .program .instruction.selected[data-loop='1'] .less {
+      opacity: 0;
+      visibility: hidden; }
+    .program .instruction .more {
+      top: -55px; }
+    .program .instruction .less {
+      bottom: -55px; }
     .program .instruction::before {
       content: attr(data-loop);
       position: absolute;
@@ -428,12 +441,15 @@ p {
       -webkit-transform: translate(-50%, -160px);
               transform: translate(-50%, -160px); }
     .program .instruction.instruction_chosen {
-      box-shadow: 5px 5px 10px rgba(42, 49, 53, 0.2);
+      box-shadow: 0px 0px 5px rgba(42, 49, 53, 0.2);
       opacity: 1 !important; }
+      .program .instruction.instruction_chosen::after {
+        display: none; }
     .program .instruction.instruction_ghost {
       box-shadow: none;
-      background: -webkit-linear-gradient(bottom, rgba(19, 23, 25, 0.3) 0%, rgba(42, 49, 53, 0.2) 100%);
-      background: linear-gradient(to top, rgba(19, 23, 25, 0.3) 0%, rgba(42, 49, 53, 0.2) 100%); }
+      background: -webkit-linear-gradient(bottom, rgba(19, 23, 25, 0.5) 0%, rgba(42, 49, 53, 0.4) 100%);
+      background: linear-gradient(to top, rgba(19, 23, 25, 0.5) 0%, rgba(42, 49, 53, 0.4) 100%);
+      z-index: 5; }
       .program .instruction.instruction_ghost i {
         display: none; }
       .program .instruction.instruction_ghost::before {
@@ -460,7 +476,7 @@ p {
   .program #program_controls {
     position: fixed;
     bottom: 0;
-    z-index: 1;
+    z-index: 10;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -470,12 +486,13 @@ p {
     width: 100%;
     padding-bottom: 20px;
     padding-top: 20px;
-    background: rgba(255, 255, 255, 0.2);
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
     text-align: center; }
     .program #program_controls .instruction {
       margin-left: 20px;
-      margin-right: 20px; }
+      margin-right: 20px;
+      position: relative;
+      z-index: 200; }
     .program #program_controls .instruction:nth-child(1).animating {
       -webkit-animation-duration: 1.2s;
               animation-duration: 1.2s;
@@ -498,16 +515,15 @@ p {
               animation-delay: 0.6s; }
   .program #program_trash {
     position: fixed;
-    bottom: 20px;
-    left: 80px;
+    bottom: 0px;
+    left: 0px;
     z-index: 50;
-    height: 80px;
-    width: 80px;
-    border: solid 1px white;
-    background: -webkit-linear-gradient(bottom, rgba(19, 23, 25, 0.2) 0%, rgba(42, 49, 53, 0.1) 100%);
-    background: linear-gradient(to top, rgba(19, 23, 25, 0.2) 0%, rgba(42, 49, 53, 0.1) 100%); }
+    height: 120px;
+    width: 220px;
+    background: -webkit-linear-gradient(bottom, rgba(226, 47, 20, 0.8) 0%, rgba(238, 83, 59, 0.75) 100%);
+    background: linear-gradient(to top, rgba(226, 47, 20, 0.8) 0%, rgba(238, 83, 59, 0.75) 100%); }
     .program #program_trash i {
-      opacity: 0.4;
+      opacity: 0.8;
       color: white;
       text-align: center;
       font-size: 30px; }

@@ -68,70 +68,70 @@ const server = app.listen(port);
  *
  */
 
+var devMode = true;
+
 router.get('/', function(req, res, next) {
 
   var io = require('socket.io')(server);
-  var collision = false;
 
   io.on('connection', function(socket) {
 
     console.log('=> USER CONNECTED');
 
-    //orb = new sphero("/dev/tty.Sphero-BBY-AMP-SPP", {emitPacketErrors: true});
+    if ( !devMode ) {
 
-  //   orb.connect(function() {
+      orb = new sphero("/dev/tty.Sphero-BBY-AMP-SPP", {emitPacketErrors: true});
 
-  //     // Init color
-  //     orb.color("blue");
+      orb.connect(function() {
 
-  //     // Init events
-  //     orb.detectCollisions();
+        // Init color
+        orb.color("blue");
 
+        // Init events
+        orb.detectCollisions();
 
+        io.emit('sp_connected', {msg:'Sphero connected !'});
 
-  //     io.emit('sp_connected', {msg:'Sphero connected !'});
+        socket.on('startCalibrate', function() {
+          console.log("START CLAIBRATE");
 
-      
+          orb.startCalibration();
+        })
 
-  //     orb.on("collision", function(data) {
+        socket.on('endCalibrate', function() {
+          console.log("END CLAIBRATE");
 
-  //       io.emit('sp_collision');
-  //       collision = true;
-  //       console.log("COLLISION");
-  //       orb.color("red");
+          orb.finishCalibration();
+          orb.color("blue");
+        })
 
-  //     });
+        socket.on('roll', function(data) {
+          console.log("ROLL");
 
-  //     socket.on('startCalibrate', function() {
-  //       console.log("START CLAIBRATE");
+          orb.color("yellow");
+          doInstructions(data.message, io);
 
-  //       orb.startCalibration();
-  //     })
+        })
 
-  //     socket.on('endCalibrate', function() {
-  //       console.log("END CLAIBRATE");
+        socket.on('stopRoll', function(data) {
+          console.log("ROLL");
 
-  //       orb.finishCalibration();
-  //       orb.color("blue");
-  //     })
+          orb.color("yellow");
+          doInstructions(data.message, io);
 
-  //     socket.on('roll', function(data) {
-  //       console.log("ROLL");
+        })
 
-  //       orb.color("yellow");
-  //       doInstructions(data.message);
+        // Error handler
+        orb.on("error", function(err, data) {
+          console.log ( err, data );
+        });
 
-  //     })
+      });
 
-  //     // Error handler
-  //     orb.on("error", function(err, data) {
-  //       console.log ( err, data );
-  //     });
-
-  //   });
+    }
    
     socket.on('hello', function() {
-      console.log("  -> User says hello !")
+      console.log("  -> A girl says hello !")
     })
 
     socket.on('disconnect', function() {
@@ -145,30 +145,37 @@ router.get('/', function(req, res, next) {
 });
 
 
-function doInstructions ( instructions ) {
+function doInstructions ( instructions, io ) {
 
   var index = 0;
   var prevDirection = 0;
   var currentDirection = 0;
+  var to_rotate, to_roll, to_sleep;
+  var isCollision = false;
+  var isRolling = true;
+
+  orb.on("collision", error);
 
   function init () {
 
     console.log('- new');
 
-    var currentDirection = directions[ instructions[index] ];
+    currentDirection = directions[ instructions[index] ];
 
     if ( prevDirection === currentDirection ) roll();
     else rotate();
 
   }
 
+  if ( instructions.length > 0 ) init()
+
   function rotate () {
 
     console.log('-- rotate');
 
-    orb.roll(100, currentDirection);
+    orb.roll(0, currentDirection);
     prevDirection = currentDirection;
-    setTimeout( roll, 100)
+    to_rotate = setTimeout( roll, 100)
 
   }
 
@@ -177,7 +184,7 @@ function doInstructions ( instructions ) {
     console.log('-- roll');
 
     orb.roll(55, currentDirection);
-    setTimeout( sleep, 575);
+    to_roll = setTimeout( sleep, 575);
 
   }
 
@@ -186,7 +193,7 @@ function doInstructions ( instructions ) {
     console.log('-- sleep');
 
     orb.roll(0,0);
-    setTimeout( end, 1000 );
+    to_sleep = setTimeout( end, 1000 );
 
   }
 
@@ -196,28 +203,55 @@ function doInstructions ( instructions ) {
 
     index ++;
 
-    if ( index < array.length ) {
+    if ( index < instructions.length ) init();
+    else success();
 
-      init();
+  }
 
-    } else success();
+  function error () {
 
-  } 
+    if ( isRolling ) {
+
+      console.log("-- collision");
+
+      io.emit('sp_collision');
+      orb.color("pink");
+
+      clear();
+
+    }
+
+  }
 
   function success () {
 
-    console.log('-- success');
+    if ( isRolling && !isCollision ) {
 
-    io.emit('sp_success');
-    orb.color("green");
+      console.log('-- success');
+
+      io.emit('sp_success');
+      orb.color("green");
+
+      clear();
+
+    }
+
+  }
+
+  function clear () {
+
+    orb.roll(0, 0);
+
+    clearTimeout(to_rotate);
+    clearTimeout(to_roll);
+    clearTimeout(to_sleep);
+
+    isRolling = false;
+    isCollision = false;
 
   }
 
 }
-
-
-
-// var t1, t2;
 
 
 

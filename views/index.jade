@@ -5,7 +5,6 @@ block content
 	main.app
 
 		section#splash.splash
-
 			img.splash_logo(src="img/splash_logo.png")
 			p.splash_next Touchez l'écran pour continuer !
 
@@ -39,29 +38,33 @@ block content
 
 			#program_navbar
 			
-			#program_instructions_container
-				ul#program_instructions.intructions
-				
+			ul#program_instructions.intructions
+			
 			i#program_play.fa.fa-play(aria-hidden="true")
 
 			ul#program_controls
 				li.instruction.open(data-direction="UP" data-loop="1")
 					i.arrow.fa.fa-arrow-up
+					i.more.fa.fa-plus
+					i.less.fa.fa-minus
 				li.instruction(data-direction="RIGHT" data-loop="1")
 					i.arrow.fa.fa-arrow-right
+					i.more.fa.fa-plus
+					i.less.fa.fa-minus
 				li.instruction(data-direction="DOWN" data-loop="1")
 					i.arrow.fa.fa-arrow-down
+					i.more.fa.fa-plus
+					i.less.fa.fa-minus
 				li.instruction(data-direction="LEFT" data-loop="1")
 					i.arrow.fa.fa-arrow-left
+					i.more.fa.fa-plus
+					i.less.fa.fa-minus
 
 			ul#program_trash
 				i.close.fa.fa-trash
 
 				li.instruction(data-direction="LEFT" data-loop="1")
 					i.arrow.fa.fa-arrow-left
-
-			#program_loop
-				input#slider-step(type="range" name="slider-step" value="1" min="1" max="9" step="1" data-highlight="true")
 
 		section#program_playing
 			#playing_section_roll.program_playing_content

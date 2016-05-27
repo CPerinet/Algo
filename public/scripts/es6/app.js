@@ -267,8 +267,9 @@ jQuery(function($) {
 				play : $("#program_play"),
 				controls : $("#program_controls"),
 				instructions : $("#program_instructions"),
-				loop : $('#program_loop'),
-				slider : $("#slider-step"),
+				trash : $('#program_trash'),
+				loop_more : $('.more'),
+				loop_less : $('.less'),
 
 				playing : $("#program_playing"),
 
@@ -288,14 +289,20 @@ jQuery(function($) {
 			init() {
 				console.log("-> Program init !")
 
-				program.dom.slider.change(program.changeLoop)
-
 				program.dom.play.click(program.play)
 
 				program.dom.playing_cancel.click(program.playingCancel)
 				program.dom.playing_reset.click(program.playingReset)
 				program.dom.playing_correct.click(program.playingCorrect)
-				program.dom.playing_continue.click(program.playingContinue)				
+				program.dom.playing_continue.click(program.playingContinue)
+
+				$("body").on('click', ".more", (event) => {
+					program.loop_change(event, 1)
+				})
+				
+				$("body").on('click', ".less", (event) => {
+					program.loop_change(event, -1)
+				})
 
 				$(document).on('click', '#program_instructions .instruction', (event) => {
 					program.onInstructionClicked(event)
@@ -317,9 +324,15 @@ jQuery(function($) {
 
 				    store: null,  // @see Store
 
+				    onStart: function (/**Event*/evt) {
+				        TweenLite.to( program.dom.trash, 0.2, { autoAlpha: 1 });
+				    },
+
 				    onEnd: function (evt) {
 				        evt.oldIndex;
 				        evt.newIndex;
+
+				        TweenLite.to( program.dom.trash, 0.2, { autoAlpha: 0 });
 
 				    	if ( program.dom.instructions.find('.instruction').length === 0 ) {
 				    		TweenMax.to( program.dom.play, 0.2, {autoAlpha: 0});
@@ -388,8 +401,6 @@ jQuery(function($) {
 
 				let program_trash = document.getElementById("program_trash")
 
-				console.log(program_trash)
-
 				let sortable_t = new Sortable(program_trash, {
 				    group: {name:"group1", pull: false, put: true},
 				    sort: false,
@@ -424,45 +435,42 @@ jQuery(function($) {
 				if ( el.hasClass('selected') ) { // UNSELECT
 					el.removeClass('selected')
 
-					if ( program.dom.instructions.find('.selected').length === 0 ) { // IF IT WAS THE LAST ONE, HIDE LOOP
+					// if ( program.dom.instructions.find('.selected').length === 0 ) { // IF IT WAS THE LAST ONE, HIDE LOOP
 
-						TweenMax.to( program.dom.loop, 0.3, { autoAlpha : 0, ease: Expo.easeInOut })
 
-					} else if ( program.dom.instructions.find('.selected').length === 1 ) { // IF THERE IS ONLY ONE LEFT, HIDE FX AND DISPLAY LOOP
+					// } else if ( program.dom.instructions.find('.selected').length === 1 ) { // IF THERE IS ONLY ONE LEFT, HIDE FX AND DISPLAY LOOP
 
-						let loops = program.dom.instructions.find('.selected').attr("data-loop")
 
-						program.dom.slider.val(loops).slider('refresh')
-
-						TweenMax.to( program.dom.loop, 0.3, { autoAlpha : 1, ease: Expo.easeInOut })
-
-					}
+					// }
 
 				} else if ( !el.hasClass('selected')) {
 					el.addClass('selected')
 
-					if ( program.dom.instructions.find('.selected').length > 1 ) { // IF THERE IS MORE THAN ONE SELECTED, HIDE LOOP DISPLAY FX
+					// if ( program.dom.instructions.find('.selected').length > 1 ) { // IF THERE IS MORE THAN ONE SELECTED, HIDE LOOP DISPLAY FX
 
-						TweenMax.to( program.dom.loop, 0.3, { autoAlpha : 0, ease: Expo.easeInOut })
+					// 	//TweenMax.to( program.dom.loop, 0.3, { autoAlpha : 0, ease: Expo.easeInOut })
 
-					} else { // IF HE IS THE FIRST ONE, SHOW LOOP
+					// } else { // IF HE IS THE FIRST ONE, SHOW LOOP
 
-						let loops = el.attr("data-loop")
+					// 	let loops = el.attr("data-loop")
 
-						program.dom.slider.val(loops).slider('refresh')
+					// 	program.dom.slider.val(loops).slider('refresh')
 
-						TweenMax.to( program.dom.loop, 0.3, { autoAlpha : 1, ease: Expo.easeInOut})
+					// 	TweenMax.to( program.dom.loop, 0.3, { autoAlpha : 1, ease: Expo.easeInOut})
 
-					}
+					// }
 				}
 
 			},
 
-			changeLoop() {
-				let loops = program.dom.slider.val()
-				let el = program.dom.instructions.find(".selected")
+			loop_change(event, amount) {
 
-				el.attr("data-loop", loops )
+				let el = $(event.target).parent()
+
+				let loops = parseInt(el.attr("data-loop")) + amount
+
+				if ( loops > 0 ) el.attr("data-loop", loops )
+
 			},
 
 			play() {
