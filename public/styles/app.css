@@ -55,20 +55,20 @@ table {
   border-collapse: collapse;
   border-spacing: 0; }
 
-.alignXY, .splash_logo, .program .placeholder::before, .program .instruction .arrow, .program .instruction .loop, .program .instruction .close, .program .instruction.instruction_ghost::before, .program #program_trash i, #program_playing .program_playing_content {
+.alignXY, .splash_logo, .program #program_play::before, .program #program_play::after, .program .placeholder::before, .program .instruction .arrow, .program .instruction .loop, .program .instruction .close, .program .instruction.instruction_ghost::before, .program #program_trash i, #program_playing .program_playing_content {
   position: absolute;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%); }
 
-.alignX, .alignB, .splash_next, .program #program_instructions li::after, .program .instruction .more, .program .instruction .less, .program #program_loop .ui-slider .ui-slider-input {
+.alignX, .alignB, .splash_next, .program #program_new-group::before, .program #program_instructions li::after, .program .instruction .more, .program .instruction .less, .program #program_loop .ui-slider .ui-slider-input {
   position: absolute;
   left: 50%;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%); }
 
-.alignY, .program #program_play, .program #program_loop {
+.alignY, .program #program_play, .program #program_new-group, .program #program_loop {
   position: absolute;
   top: 50%;
   -webkit-transform: translateY(-50%);
@@ -84,7 +84,7 @@ table {
 .alignB {
   bottom: 40px; }
 
-.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_play, .program .instruction .more, .program .instruction .less, .program #program_trash, .program #program_loop, #program_playing, #program_playing .program_playing_content {
+.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_play, .program #program_new-group, .program .instruction .more, .program .instruction .less, .program #program_trash, .program #program_loop, #program_playing, #program_playing .program_playing_content {
   opacity: 0;
   visibility: hidden; }
 
@@ -153,7 +153,7 @@ p {
   padding: 100px;
   margin: 0 auto; }
 
-.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_play, .program .instruction .more, .program .instruction .less, .program #program_trash, .program #program_loop, #program_playing, #program_playing .program_playing_content {
+.hide, .splash_logo, .menu .btn, .tuto, .tuto #tuto_create, .tuto #tuto_calibrate, .tuto #tuto_controls .btn, .program, .program #program_play, .program #program_new-group, .program .instruction .more, .program .instruction .less, .program #program_trash, .program #program_loop, #program_playing, #program_playing .program_playing_content {
   opacity: 0;
   visibility: hidden; }
 
@@ -247,19 +247,46 @@ p {
     border-top: 20px solid rgba(42, 49, 53, 0.2); }
   .program #program_play {
     position: fixed;
-    right: 40px;
+    right: 0px;
     z-index: 15;
     margin-top: -50px;
-    height: 60px;
-    width: 60px;
+    height: 100px;
+    width: 100px;
     text-align: center;
-    line-height: 60px;
+    line-height: 100px;
     color: white;
-    border-radius: 50%;
+    border-radius: 50% 0 0 50%;
     border: solid 1px #2a3135;
     background: -webkit-linear-gradient(bottom, #23292c 0%, #2a3135 100%);
     background: linear-gradient(to top, #23292c 0%, #2a3135 100%);
-    box-shadow: 0px 0px 80px rgba(42, 49, 53, 0.8); }
+    box-shadow: 0px 0px 3px rgba(42, 49, 53, 0.4); }
+    .program #program_play::before {
+      z-index: 1; }
+    .program #program_play::after {
+      content: '';
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      background: #1f2427; }
+  .program #program_new-group {
+    width: 200px;
+    margin-top: -120px;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: none;
+    border: solid 1px white;
+    border-bottom: none; }
+    .program #program_new-group::before {
+      top: -65px;
+      height: 35px;
+      width: 35px;
+      color: white;
+      font-size: 14px;
+      line-height: 35px;
+      border-radius: 50%;
+      background: rgba(42, 49, 53, 0.3); }
   .program #program_instructions {
     position: absolute;
     top: 0;
@@ -276,6 +303,10 @@ p {
         -ms-flex-align: center;
             align-items: center;
     counter-reset: li; }
+    .program #program_instructions.selectionMode .instruction {
+      opacity: 0.4;
+      -webkit-filter: blur(2px);
+              filter: blur(2px); }
     .program #program_instructions::before {
       content: "";
       position: absolute;
@@ -370,7 +401,10 @@ p {
     -webkit-transition: box-shadow 0.3s, opacity 0.3s, background 0.3s;
             transition: box-shadow 0.3s, opacity 0.3s, background 0.3s; }
     .program .instruction.selected {
-      box-shadow: 0px 0px 40px rgba(255, 255, 255, 0.8); }
+      opacity: 1 !important;
+      -webkit-filter: blur(0) !important;
+              filter: blur(0) !important;
+      box-shadow: 0px 0px 5px rgba(42, 49, 53, 0.4) !important; }
     .program .instruction[data-direction='UP'] {
       background: -webkit-linear-gradient(bottom, #fab601 0%, #fec630 100%);
       background: linear-gradient(to top, #fab601 0%, #fec630 100%); }
@@ -383,6 +417,11 @@ p {
     .program .instruction[data-direction='DOWN'] {
       background: -webkit-linear-gradient(bottom, #a7bb28 0%, #c2d640 100%);
       background: linear-gradient(to top, #a7bb28 0%, #c2d640 100%); }
+    .program .instruction.function {
+      background: -webkit-linear-gradient(bottom, #131719 0%, #2a3135 100%);
+      background: linear-gradient(to top, #131719 0%, #2a3135 100%); }
+      .program .instruction.function i:first-child:before {
+        content: "\f009" !important; }
     .program .instruction .more, .program .instruction .less {
       height: 35px;
       width: 35px;
@@ -390,30 +429,29 @@ p {
       font-size: 14px;
       line-height: 35px;
       border-radius: 50%;
-      border: 1px solid white; }
-    .program .instruction.selected .more, .program .instruction.selected .less {
+      background: rgba(42, 49, 53, 0.3); }
+    .program .instruction.addMore .more, .program .instruction.addMore .less {
       opacity: 1;
       visibility: visible; }
-    .program .instruction.selected[data-loop='1'] .less {
+    .program .instruction.addMore[data-loop='1'] .less {
+      opacity: 0;
+      visibility: hidden; }
+    .program .instruction.addMore[data-loop='9'] .more {
       opacity: 0;
       visibility: hidden; }
     .program .instruction .more {
-      top: -55px; }
+      top: -65px; }
     .program .instruction .less {
-      bottom: -55px; }
+      bottom: -65px; }
     .program .instruction::before {
-      content: attr(data-loop);
+      content: "x " attr(data-loop);
       position: absolute;
-      bottom: -7px;
-      right: -7px;
-      height: 30px;
+      left: 65px;
+      bottom: -18px;
       width: 30px;
-      line-height: 30px;
       font-size: 16px;
-      color: #2a3135;
-      background: white;
-      box-shadow: 1px 1px 1px rgba(42, 49, 53, 0.2);
-      border-radius: 50%; }
+      font-weight: bold;
+      color: white; }
     .program .instruction[data-loop='1']::before {
       display: none; }
     .program .instruction .arrow {
@@ -493,26 +531,6 @@ p {
       margin-right: 20px;
       position: relative;
       z-index: 200; }
-    .program #program_controls .instruction:nth-child(1).animating {
-      -webkit-animation-duration: 1.2s;
-              animation-duration: 1.2s;
-      -webkit-animation-delay: 0s;
-              animation-delay: 0s; }
-    .program #program_controls .instruction:nth-child(2).animating {
-      -webkit-animation-duration: 0.8s;
-              animation-duration: 0.8s;
-      -webkit-animation-delay: 0.2s;
-              animation-delay: 0.2s; }
-    .program #program_controls .instruction:nth-child(3).animating {
-      -webkit-animation-duration: 1s;
-              animation-duration: 1s;
-      -webkit-animation-delay: 0.4s;
-              animation-delay: 0.4s; }
-    .program #program_controls .instruction:nth-child(4).animating {
-      -webkit-animation-duration: 0.9s;
-              animation-duration: 0.9s;
-      -webkit-animation-delay: 0.6s;
-              animation-delay: 0.6s; }
   .program #program_trash {
     position: fixed;
     bottom: 0px;
@@ -534,6 +552,22 @@ p {
       width: 10px; }
     .program #program_trash .hover {
       background: red !important; }
+  .program #program_group {
+    position: fixed;
+    bottom: 0;
+    right: 40px;
+    z-index: 10;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    text-align: center; }
+    .program #program_group .instruction {
+      margin-left: 0;
+      margin-right: 0;
+      position: relative;
+      z-index: 200; }
   .program #program_loop {
     left: 80px;
     right: 80px;

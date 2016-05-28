@@ -25,38 +25,80 @@
 
 		@extend .alignY;
 		position: fixed;
-		right: 40px;
+		right: 0px;
 		z-index: 15;
 
 		@extend .hide;
 
 		margin-top: -50px;
 
-		height: 60px;
-		width: 60px;
+		height: 100px;
+		width: 100px;
 		
 		text-align: center;
-		line-height: 60px;
+		line-height: 100px;
 		color: white;
 
-		border-radius: 50%;
+		border-radius: 50% 0 0 50%;
 		border: solid 1px $black;
 		background: linear-gradient( to top, darken($black, 3%) 0%, $black 100%);
-		box-shadow: 0px 0px 80px rgba($black, 0.8);
+		box-shadow: 0px 0px 3px rgba($black, 0.4);
 
-		// &::after {
-		// 	content: '';
+
+		&::before {
+			@extend .alignXY;
+			z-index: 1;
+		}
+
+		&::after {
+			content: '';
 	
-		// 	@extend .alignXY;
+			@extend .alignXY;
 
-		// 	height: 90%;
-		// 	width: 90%;
+			height: 50px;
+			width: 50px;
 
-		// 	border-radius: 50%;
-		// 	border: solid 1px white;
+			border-radius: 50%;
+			background: darken( $black, 5% );
+		}
+	}
 
-		// 	animation: grow 1.2s infinite ease-in-out forwards;
-		// }
+	#program_new-group {
+
+		@extend .hide;
+		@extend .alignY;
+
+		width: 200px;
+
+		margin-top: -120px;
+
+		color: white;
+		font-size: 20px;
+		text-align: center;
+
+		padding-bottom: 10px;
+
+		border-bottom: none;
+		border: solid 1px white;
+
+		border-bottom: none;
+
+		&::before {
+
+			top: -65px;
+
+			@extend .alignX;
+
+			height: 35px;
+			width: 35px;
+
+			color: white;
+			font-size: 14px;
+			line-height: 35px;
+
+			border-radius: 50%;
+			background : rgba( $black, 0.3 );
+		}
 	}
 
 	#program_instructions {
@@ -76,11 +118,14 @@
 
 		text-align: center;
 		align-items: center;
-		
-		//border-top: solid 1px white;
-		//border-bottom: solid 1px white;
-		//background: linear-gradient( to top, rgba(darken($black, 10%), 0.2) 0%, rgba($black,0.1) 100%);
 
+		&.selectionMode {
+			.instruction {
+				opacity: 0.4;
+				filter: blur(2px);
+			}
+		}
+		
 		counter-reset: li;
 
 		&::before {
@@ -207,11 +252,11 @@
 
 		transition: box-shadow 0.3s, opacity 0.3s, background 0.3s;
 
-
 		&.selected {
-			box-shadow: 0px 0px 40px rgba(white, 0.8);
+			opacity: 1 !important;
+			filter: blur(0) !important;
+			box-shadow: 0px 0px 5px rgba($black, 0.4) !important;
 		}
-
 
 		&[data-direction='UP'] {
 			background: linear-gradient( to top, darken($yellow, 10%) 0%, $yellow 100%);
@@ -229,6 +274,14 @@
 			background: linear-gradient( to top, darken($green, 10%) 0%, $green 100%);
 		}
 
+		&.function {
+			background: linear-gradient( to top, darken($black, 10%) 0%, $black 100%);
+
+			i:first-child:before {
+				content: "\f009" !important;
+			}
+		}
+
 		.more, .less {
 			@extend .alignX;
 			@extend .hide;
@@ -241,11 +294,12 @@
 			line-height: 35px;
 
 			border-radius: 50%;
-			border: 1px solid white;
+			//border: 1px solid white;
+			background : rgba( $black, 0.3 );
 
 		}
 
-		&.selected {
+		&.addMore {
 			.more, .less {
 				opacity: 1;
 				visibility: visible;
@@ -255,34 +309,33 @@
 				opacity: 0;
 				visibility: hidden;
 			}
+
+			&[data-loop='9'] .more {
+				opacity: 0;
+				visibility: hidden;
+			}
 		}
 
 		.more {
-			top: -55px;
+			top: -65px;
 		}
 
 		.less {
-			bottom: -55px;
+			bottom: -65px;
 		}
 
 		&::before {
-			content: attr(data-loop);
+			content: "x " attr(data-loop);
 
 			position: absolute;
-			bottom: -7px;
-			right: -7px;
+			left: 65px;
+			bottom: -18px;
 
-			height: 30px;
 			width: 30px;
 
-			line-height: 30px;
 			font-size: 16px;
-			color: $black;
-
-			background: white;
-			box-shadow: 1px 1px 1px rgba($black, 0.2);
-
-			border-radius: 50%;
+			font-weight: bold;
+			color: white;
 		}
 
 		&[data-loop='1'] {
@@ -411,12 +464,10 @@
 
 		width: 100%;
 
-
 		padding-bottom: 20px;
 		padding-top: 20px;
 
 		background: rgba(white, 0.15);
-		//border-top: 1px solid rgba(white, 0.2);
 		
 		text-align: center;
 
@@ -429,36 +480,6 @@
 			z-index: 200;
 
 		}
-
-		.instruction:nth-child(1).animating {
-			animation-duration: 1.2s;
-			animation-delay: 0s;
-		}
-
-		.instruction:nth-child(2).animating {
-			animation-duration: 0.8s;
-			animation-delay: 0.2s;
-		}
-
-		.instruction:nth-child(3).animating {
-			animation-duration: 1s;
-			animation-delay: 0.4s;
-		}
-
-		.instruction:nth-child(4).animating {
-			animation-duration: 0.9s;
-			animation-delay: 0.6s;
-		}
-
-		// @keyframes air {
-		// 	from {
-		// 		transform: translateY(0);
-		// 	}
-
-		// 	to {
-		// 		transform: translateY(-8px);
-		// 	}
-		// }
 
 	}
 
@@ -496,6 +517,32 @@
 
 		.hover {
 			background: red !important;
+		}
+
+	}
+
+	#program_group {
+
+		position: fixed;
+		bottom: 0;
+		right: 40px;
+		z-index: 10;
+
+		display: flex;
+
+		padding-bottom: 20px;
+		padding-top: 20px;
+		
+		text-align: center;
+
+		.instruction {
+
+			margin-left: 0;
+			margin-right: 0;
+
+			position: relative;
+			z-index: 200;
+
 		}
 
 	}

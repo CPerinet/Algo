@@ -16543,6 +16543,7 @@ jQuery(function ($) {
 				trash: $('#program_trash'),
 				loop_more: $('.more'),
 				loop_less: $('.less'),
+				group_new: $('#program_new-group'),
 
 				playing: $("#program_playing"),
 
@@ -16563,6 +16564,8 @@ jQuery(function ($) {
 				console.log("-> Program init !");
 
 				program.dom.play.click(program.play);
+				program.dom.program.click(program.unselect);
+				program.dom.group_new.click(program.createFuntion);
 
 				program.dom.playing_cancel.click(program.playingCancel);
 				program.dom.playing_reset.click(program.playingReset);
@@ -16583,7 +16586,7 @@ jQuery(function ($) {
 
 				var sortable_i = new Sortable(program_instructions, {
 					group: { name: "group1", pull: true, put: true },
-					animation: 0,
+					animation: 200,
 
 					scroll: program.dom.program[0],
 					scrollSensitivity: 130,
@@ -16599,6 +16602,9 @@ jQuery(function ($) {
 
 					onStart: function onStart( /**Event*/evt) {
 						TweenLite.to(program.dom.trash, 0.2, { autoAlpha: 1 });
+
+						program.unselectAll();
+						program.updateFonction();
 					},
 
 					onEnd: function onEnd(evt) {
@@ -16658,6 +16664,16 @@ jQuery(function ($) {
 						evt.newIndex;
 
 						$("#program_controls .instruction_chosen").removeClass('instruction_chosen');
+
+						if ($('.selected').length === 1) {
+
+							program.unselectAll();
+						} else if ($('.selected').length > 1) {
+
+							program.dom.instructions.find('.instruction').eq(evt.newIndex).addClass('selected');
+
+							program.updateFonction();
+						}
 					},
 
 					onRemove: function onRemove( /**Event*/evt) {
@@ -16697,32 +16713,39 @@ jQuery(function ($) {
 			onInstructionClicked: function onInstructionClicked(event) {
 				var el = $(event.target);
 
-				if (el.hasClass('selected')) {
-					// UNSELECT
-					el.removeClass('selected');
+				if (!el.hasClass('more') && !el.hasClass('less')) {
 
-					// if ( program.dom.instructions.find('.selected').length === 0 ) { // IF IT WAS THE LAST ONE, HIDE LOOP
+					if (el.hasClass('selected')) {
+						// UNSELECT
+						el.removeClass('selected');
 
-					// } else if ( program.dom.instructions.find('.selected').length === 1 ) { // IF THERE IS ONLY ONE LEFT, HIDE FX AND DISPLAY LOOP
+						if (program.dom.instructions.find('.selected').length === 0) {
+							// IF IT WAS THE LAST ONE, HIDE LOOP
 
-					// }
-				} else if (!el.hasClass('selected')) {
+							$('.addMore').removeClass('addMore');
+							program.dom.instructions.removeClass('selectionMode');
+						} else if (program.dom.instructions.find('.selected').length === 1) {
+							// IF THERE IS ONLY ONE LEFT, HIDE FX AND DISPLAY LOOP
+
+							$('.selected').addClass('addMore');
+						}
+					} else if (!el.hasClass('selected')) {
 						el.addClass('selected');
 
-						// if ( program.dom.instructions.find('.selected').length > 1 ) { // IF THERE IS MORE THAN ONE SELECTED, HIDE LOOP DISPLAY FX
+						if (program.dom.instructions.find('.selected').length > 1) {
+							// IF THERE IS MORE THAN ONE SELECTED, HIDE LOOP DISPLAY FX
 
-						// 	//TweenMax.to( program.dom.loop, 0.3, { autoAlpha : 0, ease: Expo.easeInOut })
+							$('.addMore').removeClass('addMore');
+						} else {
+							// IF HE IS THE FIRST ONE, SHOW LOOP
 
-						// } else { // IF HE IS THE FIRST ONE, SHOW LOOP
-
-						// 	let loops = el.attr("data-loop")
-
-						// 	program.dom.slider.val(loops).slider('refresh')
-
-						// 	TweenMax.to( program.dom.loop, 0.3, { autoAlpha : 1, ease: Expo.easeInOut})
-
-						// }
+							$('.selected').addClass('addMore');
+							program.dom.instructions.addClass('selectionMode');
+						}
 					}
+				}
+
+				program.updateFonction();
 			},
 			loop_change: function loop_change(event, amount) {
 
@@ -16730,7 +16753,62 @@ jQuery(function ($) {
 
 				var loops = parseInt(el.attr("data-loop")) + amount;
 
-				if (loops > 0) el.attr("data-loop", loops);
+				if (loops > 0 && loops < 10) el.attr("data-loop", loops);
+			},
+			updateFonction: function updateFonction() {
+
+				var selected = $('.selected');
+
+				if (selected.length > 1) {
+
+					var pos = $(selected[0]).offset().left + 40 + program.dom.program.scrollLeft(); // - $(window).width()
+					var width = $(selected[selected.length - 1]).offset().left - $(selected[0]).offset().left;
+
+					TweenLite.to(program.dom.group_new, 0.2, { x: pos, width: width, autoAlpha: 1 });
+				} else {
+
+					TweenLite.to(program.dom.group_new, 0.2, { autoAlpha: 0 });
+				}
+			},
+			createFuntion: function createFuntion() {
+
+				var els = program.dom.instructions.find('.selected');
+				var el = els.eq(0);
+
+				program.unselectAll();
+				program.updateFonction();
+
+				var directions = [];
+
+				els.each(function (index, value) {
+					var direction = els.eq(index).attr("data-direction");
+					var loops = els.eq(index).attr("data-loop");
+
+					for (var i = 0; i < loops; i++) {
+						directions.push(direction);
+					}
+				});
+
+				el.addClass('function');
+				el.attr('data-type', 'fx');
+				el.attr('data-direction', directions.toString());
+				el.attr('data-loop', 1);
+
+				TweenLite.to(els.not(':eq(0)'), 0.3, { scale: 0, autoAlpha: 0, ease: Expo.easeInOut, onComplete: function onComplete() {
+						this.target.remove();
+					}
+				});
+			},
+			unselectAll: function unselectAll() {
+				$('.selectionMode').removeClass('selectionMode');
+				$('.selected').removeClass('selected');
+				$('.addMore').removeClass('addMore');
+			},
+			unselect: function unselect(event) {
+				if ($(event.target).is($("#program_instructions"))) {
+					program.unselectAll();
+					program.updateFonction();
+				}
 			},
 			play: function play() {
 

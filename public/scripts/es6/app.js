@@ -270,6 +270,7 @@ jQuery(function($) {
 				trash : $('#program_trash'),
 				loop_more : $('.more'),
 				loop_less : $('.less'),
+				group_new : $('#program_new-group'),
 
 				playing : $("#program_playing"),
 
@@ -290,6 +291,8 @@ jQuery(function($) {
 				console.log("-> Program init !")
 
 				program.dom.play.click(program.play)
+				program.dom.program.click(program.unselect)
+				program.dom.group_new.click(program.createFuntion)
 
 				program.dom.playing_cancel.click(program.playingCancel)
 				program.dom.playing_reset.click(program.playingReset)
@@ -310,7 +313,7 @@ jQuery(function($) {
 
 				let sortable_i = new Sortable(program_instructions, {
 				    group: {name:"group1", pull: true, put: true},
-				    animation: 0,
+				    animation: 200,
 
 				    scroll: program.dom.program[0],
 				    scrollSensitivity: 130,
@@ -326,6 +329,9 @@ jQuery(function($) {
 
 				    onStart: function (/**Event*/evt) {
 				        TweenLite.to( program.dom.trash, 0.2, { autoAlpha: 1 });
+
+				        program.unselectAll()
+				        program.updateFonction()
 				    },
 
 				    onEnd: function (evt) {
@@ -389,6 +395,19 @@ jQuery(function($) {
 				        evt.newIndex;
 
 				        $("#program_controls .instruction_chosen").removeClass('instruction_chosen')
+
+				        if ( $('.selected').length === 1 ) {
+
+				        	program.unselectAll()
+
+				        } else if ( $('.selected').length > 1 ) {
+
+				        	program.dom.instructions.find('.instruction').eq( evt.newIndex ).addClass('selected')
+
+				        	program.updateFonction()
+
+				        }
+				        
 				    },
 
 				    onRemove: function (/**Event*/evt) {
@@ -432,34 +451,40 @@ jQuery(function($) {
 			onInstructionClicked(event) {
 				let el = $(event.target)
 
-				if ( el.hasClass('selected') ) { // UNSELECT
-					el.removeClass('selected')
+				if ( !el.hasClass('more') && !el.hasClass('less') ) {
 
-					// if ( program.dom.instructions.find('.selected').length === 0 ) { // IF IT WAS THE LAST ONE, HIDE LOOP
+					if ( el.hasClass('selected') ) { // UNSELECT
+						el.removeClass('selected')
 
+						if ( program.dom.instructions.find('.selected').length === 0 ) { // IF IT WAS THE LAST ONE, HIDE LOOP
 
-					// } else if ( program.dom.instructions.find('.selected').length === 1 ) { // IF THERE IS ONLY ONE LEFT, HIDE FX AND DISPLAY LOOP
+							$('.addMore').removeClass('addMore')
+							program.dom.instructions.removeClass('selectionMode')
 
+						} else if ( program.dom.instructions.find('.selected').length === 1 ) { // IF THERE IS ONLY ONE LEFT, HIDE FX AND DISPLAY LOOP
 
-					// }
+							$('.selected').addClass('addMore')
 
-				} else if ( !el.hasClass('selected')) {
-					el.addClass('selected')
+						}
 
-					// if ( program.dom.instructions.find('.selected').length > 1 ) { // IF THERE IS MORE THAN ONE SELECTED, HIDE LOOP DISPLAY FX
+					} else if ( !el.hasClass('selected')) {
+						el.addClass('selected')
 
-					// 	//TweenMax.to( program.dom.loop, 0.3, { autoAlpha : 0, ease: Expo.easeInOut })
+						if ( program.dom.instructions.find('.selected').length > 1 ) { // IF THERE IS MORE THAN ONE SELECTED, HIDE LOOP DISPLAY FX
 
-					// } else { // IF HE IS THE FIRST ONE, SHOW LOOP
+							$('.addMore').removeClass('addMore')
 
-					// 	let loops = el.attr("data-loop")
+						} else { // IF HE IS THE FIRST ONE, SHOW LOOP
 
-					// 	program.dom.slider.val(loops).slider('refresh')
+							$('.selected').addClass('addMore')
+							program.dom.instructions.addClass('selectionMode')
 
-					// 	TweenMax.to( program.dom.loop, 0.3, { autoAlpha : 1, ease: Expo.easeInOut})
+						}
+					}
 
-					// }
 				}
+
+				program.updateFonction()
 
 			},
 
@@ -469,8 +494,71 @@ jQuery(function($) {
 
 				let loops = parseInt(el.attr("data-loop")) + amount
 
-				if ( loops > 0 ) el.attr("data-loop", loops )
+				if ( loops > 0 && loops < 10 ) el.attr("data-loop", loops )
 
+			},
+
+			updateFonction () {
+
+				let selected = $('.selected')
+
+				if ( selected.length > 1 ) {
+
+					var pos = $( selected[0] ).offset().left + 40  + program.dom.program.scrollLeft()// - $(window).width()
+					var width = $(selected[ selected.length - 1 ]).offset().left - $(selected[0]).offset().left
+
+					TweenLite.to( program.dom.group_new, 0.2, { x : pos, width: width, autoAlpha: 1 })
+
+				} else {
+
+					TweenLite.to( program.dom.group_new, 0.2, { autoAlpha: 0 });
+
+				}
+
+			},
+
+			createFuntion () {
+
+				let els = program.dom.instructions.find('.selected')
+				let el = els.eq(0)
+
+				program.unselectAll()
+				program.updateFonction()
+
+				let directions = []
+
+				els.each( (index, value) => {
+					let direction = els.eq(index).attr("data-direction")
+					let loops = els.eq(index).attr("data-loop")
+
+					for ( var i = 0; i < loops; i ++ ) {
+						directions.push( direction )
+					}
+					
+				})
+
+				el.addClass('function')
+				el.attr('data-type', 'fx')
+				el.attr('data-direction', directions.toString() )
+				el.attr('data-loop', 1 )
+
+				TweenLite.to( els.not(':eq(0)'), 0.3, { scale: 0, autoAlpha: 0, ease: Expo.easeInOut, onComplete() {
+					(this.target).remove()
+				}})
+
+			},
+
+			unselectAll() {
+				$('.selectionMode').removeClass('selectionMode')
+				$('.selected').removeClass('selected')
+				$('.addMore').removeClass('addMore')
+			},
+
+			unselect(event) {
+				if ( $(event.target).is( $("#program_instructions") ) ) {
+					program.unselectAll()
+					program.updateFonction()
+				}
 			},
 
 			play() {
