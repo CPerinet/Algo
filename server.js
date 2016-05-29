@@ -177,20 +177,7 @@ function doInstructions ( instructions, io ) {
 
     orb.roll(0, currentDirection);
     prevDirection = currentDirection;
-    to_rotate = setTimeout( out, 100)
-
-  }
-
-  function out () {
-
-    console.log('-- out');
-
-    var d = new Date();
-    var n = d.getTime();
-    console.log( n );
-
-    orb.roll(80, currentDirection);
-    to_roll = setTimeout( roll, 100);
+    to_rotate = setTimeout( roll, 100)
 
   }
 
@@ -198,11 +185,7 @@ function doInstructions ( instructions, io ) {
 
     console.log('-- roll');
 
-    var d = new Date();
-    var n = d.getTime();
-    console.log( n );
-
-    orb.roll(20, currentDirection);
+    orb.roll(55, currentDirection);
     to_roll = setTimeout( sleep, 800);
 
   }

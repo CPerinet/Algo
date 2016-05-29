@@ -784,7 +784,7 @@ jQuery(function($) {
 			//
 			// DISPLAY SHOW
 
-			program.show()
+			splash.show()
 
 		}
 
