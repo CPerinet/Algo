@@ -4,6 +4,8 @@ block content
 
 	main.app
 
+		.topbar
+
 		section#splash.splash
 			img.splash_logo(src="img/splash_logo.png")
 			p.splash_next Touchez l'écran pour continuer !
@@ -35,10 +37,10 @@ block content
 
 
 		section#program.program
-
-			#program_navbar
 			
 			ul#program_instructions.intructions
+
+			i#program_home.fa.fa-bars(aria-hidden="true")
 			
 			i#program_play.fa.fa-play(aria-hidden="true")
 
@@ -69,8 +71,6 @@ block content
 					i.arrow.fa.fa-arrow-left
 
 			ul#program_group
-				li.instruction(data-direction="LEFT" data-loop="1")
-					i.arrow.fa.fa-arrow-left
 
 
 		section#program_playing

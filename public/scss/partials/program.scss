@@ -2,7 +2,6 @@
 
 	@extend .hide;
 	@extend .full;
-	background: rgba($blue, 0.6);
 
 	overflow-x: scroll;
 
@@ -10,15 +9,14 @@
 		filter: blur(10px);
 	}
 
-	#program_navbar {
+	#program_home {
 		position: fixed;
-		top: 0;
-		left: 0;
 
-		height: 100px;
-		width: 100%;
+		top: 40px;
+		left: 40px;
 
-		border-top: 20px solid rgba($black, 0.2);
+		color: white;
+		font-size: 20px;
 	}
 
 	#program_play {
@@ -275,10 +273,11 @@
 		}
 
 		&.function {
-			background: linear-gradient( to top, darken($black, 10%) 0%, $black 100%);
+			background: linear-gradient( to top, darken(white, 10%) 0%, white 100%);
 
 			i:first-child:before {
 				content: "\f009" !important;
+				color: $black;
 			}
 		}
 
@@ -526,7 +525,7 @@
 		position: fixed;
 		bottom: 0;
 		right: 40px;
-		z-index: 10;
+		z-index: 55;
 
 		display: flex;
 

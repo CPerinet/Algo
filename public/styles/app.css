@@ -184,6 +184,15 @@ p {
 .controls .btn {
   display: inline-block; }
 
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  height: 20px;
+  width: 100%;
+  background: rgba(42, 49, 53, 0.2); }
+
 .splash {
   overflow: hidden; }
   .splash_logo {
@@ -224,6 +233,7 @@ p {
   .tuto_instructions {
     display: inline-block;
     vertical-align: middle;
+    text-align: center;
     width: 100%;
     color: white; }
     .tuto_instructions h1 {
@@ -233,18 +243,16 @@ p {
             transform: translate(0, 200px); }
 
 .program {
-  background: rgba(27, 190, 212, 0.6);
   overflow-x: scroll; }
   .program.blur {
     -webkit-filter: blur(10px);
             filter: blur(10px); }
-  .program #program_navbar {
+  .program #program_home {
     position: fixed;
-    top: 0;
-    left: 0;
-    height: 100px;
-    width: 100%;
-    border-top: 20px solid rgba(42, 49, 53, 0.2); }
+    top: 40px;
+    left: 40px;
+    color: white;
+    font-size: 20px; }
   .program #program_play {
     position: fixed;
     right: 0px;
@@ -418,10 +426,11 @@ p {
       background: -webkit-linear-gradient(bottom, #a7bb28 0%, #c2d640 100%);
       background: linear-gradient(to top, #a7bb28 0%, #c2d640 100%); }
     .program .instruction.function {
-      background: -webkit-linear-gradient(bottom, #131719 0%, #2a3135 100%);
-      background: linear-gradient(to top, #131719 0%, #2a3135 100%); }
+      background: -webkit-linear-gradient(bottom, #e6e6e6 0%, white 100%);
+      background: linear-gradient(to top, #e6e6e6 0%, white 100%); }
       .program .instruction.function i:first-child:before {
-        content: "\f009" !important; }
+        content: "\f009" !important;
+        color: #2a3135; }
     .program .instruction .more, .program .instruction .less {
       height: 35px;
       width: 35px;
@@ -556,7 +565,7 @@ p {
     position: fixed;
     bottom: 0;
     right: 40px;
-    z-index: 10;
+    z-index: 55;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;

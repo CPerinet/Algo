@@ -16543,6 +16543,7 @@ jQuery(function ($) {
 				trash: $('#program_trash'),
 				loop_more: $('.more'),
 				loop_less: $('.less'),
+				group: $("#program_group"),
 				group_new: $('#program_new-group'),
 
 				playing: $("#program_playing"),
@@ -16628,6 +16629,8 @@ jQuery(function ($) {
 						TweenMax.killTweensOf(program.dom.program);
 						TweenMax.to(program.dom.program, 1, { scrollTo: { x: scroll, ease: Expo.easeOut } });
 
+						program.dom.instructions.find('.origin-fx').removeClass('origin-fx');
+
 						if (program.dom.instructions.find('.instruction').length === 0) {
 							TweenMax.to(program.dom.play, 0.3, { autoAlpha: 0 });
 						} else {
@@ -16699,11 +16702,55 @@ jQuery(function ($) {
 
 					onRemove: function onRemove( /**Event*/evt) {
 						// same properties as onUpdate
-					}
+					},
 
+					onAdd: function onAdd() {
+
+						if (program.dom.trash.find('.origin-fx').length != 0) {
+							program.deleteFunction();
+						}
+					}
 				});
 
 				program.sortables.push(sortable_t);
+
+				var sortable_g = new Sortable(program_group, {
+					group: { name: "group1", pull: 'clone', put: false },
+					animation: 0,
+
+					draggable: ".instruction",
+
+					ghostClass: "instruction_ghost",
+					chosenClass: "instruction_chosen",
+					fallbackClass: "instruction_fallback",
+
+					store: null, // @see Store
+
+					onStart: function onStart( /**Event*/evt) {
+						// TweenLite.to( program.dom.trash, 0.2, { autoAlpha: 1 });
+
+						// program.unselectAll()
+						// program.updateFonction()
+						TweenLite.to(program.dom.trash, 0.2, { autoAlpha: 1 });
+					},
+
+					onEnd: function onEnd(evt) {
+
+						TweenLite.to(program.dom.trash, 0.2, { autoAlpha: 0 });
+
+						// if ( program.dom.instructions.find('.instruction').length === 0 ) {
+						// 	TweenMax.to( program.dom.play, 0.2, {autoAlpha: 0});
+						// } else {
+						// 	TweenMax.to( program.dom.play, 0.2, {autoAlpha: 1});
+						// }
+					},
+
+					onSort: function onSort(evt) {},
+
+					onRemove: function onRemove(evt) {}
+				});
+
+				program.sortables.push(sortable_g);
 			},
 			show: function show() {
 				console.log("-> Program show !");
@@ -16730,6 +16777,13 @@ jQuery(function ($) {
 							$('.selected').addClass('addMore');
 						}
 					} else if (!el.hasClass('selected')) {
+
+						if (program.dom.group.children('.instruction').length != 0) {
+							// IF ALREADY A GROUP
+
+							program.unselectAll();
+						}
+
 						el.addClass('selected');
 
 						if (program.dom.instructions.find('.selected').length > 1) {
@@ -16794,17 +16848,30 @@ jQuery(function ($) {
 				el.attr('data-direction', directions.toString());
 				el.attr('data-loop', 1);
 
+				el.clone().appendTo(program.dom.group);
+
+				program.dom.group.find('.instruction').addClass('origin-fx');
+
 				TweenLite.to(els.not(':eq(0)'), 0.3, { scale: 0, autoAlpha: 0, ease: Expo.easeInOut, onComplete: function onComplete() {
 						this.target.remove();
 					}
 				});
 			},
+			deleteFunction: function deleteFunction() {
+
+				TweenMax.staggerTo($('.function'), 0.3, { scale: 0, autoAlpha: 0, onComplete: function onComplete() {
+						this.target.remove();
+					}
+				});
+			},
 			unselectAll: function unselectAll() {
+
 				$('.selectionMode').removeClass('selectionMode');
 				$('.selected').removeClass('selected');
 				$('.addMore').removeClass('addMore');
 			},
 			unselect: function unselect(event) {
+
 				if ($(event.target).is($("#program_instructions"))) {
 					program.unselectAll();
 					program.updateFonction();

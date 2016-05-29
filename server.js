@@ -68,7 +68,7 @@ const server = app.listen(port);
  *
  */
 
-var devMode = true;
+var devMode = false;
 
 router.get('/', function(req, res, next) {
 
@@ -162,8 +162,10 @@ function doInstructions ( instructions, io ) {
 
     currentDirection = directions[ instructions[index] ];
 
-    if ( prevDirection === currentDirection ) roll();
-    else rotate();
+    // if ( prevDirection === currentDirection ) out();
+    // else rotate();
+
+    rotate()
 
   }
 
@@ -175,7 +177,20 @@ function doInstructions ( instructions, io ) {
 
     orb.roll(0, currentDirection);
     prevDirection = currentDirection;
-    to_rotate = setTimeout( roll, 100)
+    to_rotate = setTimeout( out, 100)
+
+  }
+
+  function out () {
+
+    console.log('-- out');
+
+    var d = new Date();
+    var n = d.getTime();
+    console.log( n );
+
+    orb.roll(80, currentDirection);
+    to_roll = setTimeout( roll, 100);
 
   }
 
@@ -183,8 +198,12 @@ function doInstructions ( instructions, io ) {
 
     console.log('-- roll');
 
-    orb.roll(55, currentDirection);
-    to_roll = setTimeout( sleep, 575);
+    var d = new Date();
+    var n = d.getTime();
+    console.log( n );
+
+    orb.roll(20, currentDirection);
+    to_roll = setTimeout( sleep, 800);
 
   }
 
@@ -192,8 +211,8 @@ function doInstructions ( instructions, io ) {
 
     console.log('-- sleep');
 
-    orb.roll(0,0);
-    to_sleep = setTimeout( end, 1000 );
+    orb.roll(0,currentDirection);
+    to_sleep = setTimeout( end, 1500 );
 
   }
 
@@ -215,7 +234,7 @@ function doInstructions ( instructions, io ) {
       console.log("-- collision");
 
       io.emit('sp_collision');
-      orb.color("pink");
+      orb.color("red");
 
       clear();
 
@@ -254,17 +273,6 @@ function doInstructions ( instructions, io ) {
 }
 
 
-
-
-
-// function collision () {
-
-//   clearInterval(t1);
-//   clearInterval(t2);
-
-//   collision = true;
-
-// }
 
 
 
